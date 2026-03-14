@@ -1,6 +1,5 @@
 <!DOCTYPE html><html lang="th">
-<head>
-<meta charset="UTF-8">
+<head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Z8 Future Crew</title><style>
 
 body{
@@ -10,6 +9,8 @@ background:#050505;
 color:white;
 overflow-x:hidden;
 }
+
+/* HEADER */
 
 header{
 text-align:center;
@@ -25,7 +26,10 @@ text-shadow:0 0 15px #00ffff;
 
 .subtitle{
 color:#aaa;
-margin-top:10px;
+}
+
+nav{
+margin-top:15px;
 }
 
 nav a{
@@ -34,6 +38,8 @@ color:#00ffff;
 text-decoration:none;
 font-weight:bold;
 }
+
+/* SECTION */
 
 .section{
 max-width:1200px;
@@ -54,23 +60,7 @@ border-radius:15px;
 padding:25px;
 }
 
-.counter{
-font-size:34px;
-color:#00ff9c;
-}
-
-button{
-background:#00ffff;
-border:none;
-padding:15px 25px;
-border-radius:10px;
-font-weight:bold;
-cursor:pointer;
-}
-
-button:hover{
-box-shadow:0 0 15px #00ffff;
-}
+/* FORM */
 
 .form-input{
 width:100%;
@@ -82,7 +72,28 @@ background:#111;
 color:white;
 }
 
-/* แผนที่ */
+button{
+background:#00ffff;
+border:none;
+padding:14px 25px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+box-shadow:0 0 15px #00ffff;
+}
+
+/* DASHBOARD */
+
+.counter{
+font-size:34px;
+color:#00ff9c;
+font-weight:bold;
+}
+
+/* MAP */
 
 .map-container{
 position:relative;
@@ -100,7 +111,7 @@ width:14px;
 height:14px;
 background:#00ffff;
 border-radius:50%;
-box-shadow:0 0 10px #00ffff;
+box-shadow:0 0 12px #00ffff;
 animation:pulse 1.5s infinite;
 }
 
@@ -110,7 +121,7 @@ animation:pulse 1.5s infinite;
 100%{transform:scale(1)}
 }
 
-/* ปุ่มลอย */
+/* FLOAT CONTACT */
 
 .contact-float{
 position:fixed;
@@ -122,7 +133,7 @@ z-index:999;
 .contact-main{
 background:#00ffff;
 color:black;
-padding:15px 20px;
+padding:14px 18px;
 border-radius:30px;
 cursor:pointer;
 }
@@ -142,7 +153,7 @@ margin-top:5px;
 text-decoration:none;
 }
 
-/* ticker */
+/* NEWS TICKER */
 
 .ticker{
 position:fixed;
@@ -165,16 +176,6 @@ animation:ticker 25s linear infinite;
 100%{transform:translateX(-100%)}
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-td,th{
-border:1px solid #222;
-padding:10px;
-}
-
 canvas{
 position:fixed;
 top:0;
@@ -185,33 +186,33 @@ z-index:-1;
 </style></head><body><canvas id="bg"></canvas>
 
 <header><div class="logo">Z8 FUTURE CREW</div>
-<div class="subtitle">Online Opportunity Network</div><nav>
-<a href="#about">เกี่ยวกับ</a>
-<a href="#job">สมัครงาน</a>
+<div class="subtitle">Online Opportunity Network</div><nav><a href="#about">เกี่ยวกับ</a>
+<a href="#apply">สมัครงาน</a>
 <a href="#dashboard">Dashboard</a>
 <a href="#team">ทีมงาน</a>
-</nav></header><section id="about" class="section"><h2>เกี่ยวกับ Z8</h2><div class="grid"><div class="card">
-Z8 Future Crew เป็นทีมงานออนไลน์ที่เปิดโอกาสให้คนทั่วไปสามารถสร้างรายได้ผ่านระบบอินเทอร์เน็ต
+
+</nav></header><section id="about" class="section"><h2>เกี่ยวกับองค์กร</h2><div class="grid"><div class="card">
+Z8 Future Crew เป็นเครือข่ายงานออนไลน์ที่เปิดโอกาสให้คนทั่วไปสามารถสร้างรายได้ผ่านอินเทอร์เน็ต
 </div><div class="card">
-งานสามารถทำผ่านมือถือหรือคอมพิวเตอร์ มีทีมงานสอนทุกขั้นตอน
+รายได้เฉลี่ยของสมาชิกอยู่ที่ประมาณ 2,000 – 3,000 บาทต่อวัน ขึ้นอยู่กับเวลาและความตั้งใจในการทำงาน
 </div><div class="card">
 <h3>ผู้บริหาร</h3>
 <p style="font-size:22px;color:#00ffff">JIMMY</p>
 Founder
-</div></div></section><section id="job" class="section"><h2>📋 สมัครงานออนไลน์</h2><div class="grid"><div class="card">
-<h3>คุณสมบัติ</h3>
-• อายุ 18 ปีขึ้นไป<br>
-• รับทุกอาชีพ<br>
+</div></div></section><section id="apply" class="section"><h2>สมัครงานออนไลน์</h2><div class="grid"><div class="card"><h3>คุณสมบัติ</h3>• อายุ 18 ปีขึ้นไป
+• รับทุกอาชีพ
 • ใช้อินเทอร์เน็ตได้
-</div><div class="card"><h3>ฟอร์มสมัคร</h3><input class="form-input" id="name" placeholder="ชื่อ"><input class="form-input" id="age" placeholder="อายุ"><input class="form-input" id="province" placeholder="จังหวัด"><button onclick="applyJob()">ส่งใบสมัคร</button>
 
-</div></div></section><section id="dashboard" class="section"><h2>📊 Dashboard</h2><div class="grid"><div class="card">
+</div><div class="card"><h3>ฟอร์มสมัคร</h3><input class="form-input" id="name" placeholder="ชื่อ"><input class="form-input" id="age" type="number" placeholder="อายุ"><input class="form-input" id="province" placeholder="จังหวัด"><button onclick="applyJob()">ส่งใบสมัคร</button>
+
+</div></div></section><section id="dashboard" class="section"><h2>Dashboard</h2><div class="grid"><div class="card">
 รายได้วันนี้
 <div class="counter" id="income">0</div>
 </div><div class="card">
 สมาชิกออนไลน์
 <div class="counter" id="member">0</div>
-</div></div></section><section class="section"><h2>💰 ตลาดการเงิน</h2><div id="chart"></div><script src="https://s3.tradingview.com/tv.js"></script><script>
+</div></div></section><section class="section"><h2>ตลาดการเงิน</h2><div id="chart"></div><script src="https://s3.tradingview.com/tv.js"></script><script>
+
 new TradingView.widget({
 width:"100%",
 height:500,
@@ -220,38 +221,39 @@ interval:"5",
 timezone:"Asia/Bangkok",
 theme:"dark",
 container_id:"chart"
-});
-</script></section><section id="team" class="section"><h2>🌍 ทีมงานทั่วประเทศ</h2><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"><div id="mapDots"></div></div></section><section class="section"><h2>🎰 สถิติหวย</h2><table><tr>
-<th>ปี</th>
-<th>เลขเด่น</th>
-</tr><tr>
-<td>2025</td>
-<td>36</td>
-</tr><tr>
-<td>2024</td>
-<td>52</td>
-</tr><tr>
-<td>2023</td>
-<td>91</td>
-</tr></table></section><div class="contact-float"><div class="contact-main" onclick="toggleContact()">ติดต่อทีมงาน</div><div class="contact-menu" id="menu"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
+})
+
+</script></section><section id="team" class="section"><h2>เครือข่ายทีมงานทั่วประเทศ</h2><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"><div id="mapDots"></div></div></section><div class="contact-float"><div class="contact-main" onclick="toggleContact()">
+ติดต่อทีมงาน
+</div><div class="contact-menu" id="menu"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
 ติดต่อ HR
 </a><a href="https://www.facebook.com/share/1CLqS1ntem/" target="_blank">
 ติดต่อการตลาด
-</a></div></div><div class="ticker"><div class="ticker-text">ข่าวเศรษฐกิจ: ราคาทองผันผวน นักลงทุนจับตาธนาคารกลางโลก
+</a></div></div><div class="ticker"><div class="ticker-text">ข่าวเศรษฐกิจ : ราคาทองคำผันผวน นักลงทุนทั่วโลกจับตานโยบายการเงินของธนาคารกลาง
 
 </div></div><script>
 
+/* CONTACT */
+
 function toggleContact(){
+
 let m=document.getElementById("menu")
+
 m.style.display=(m.style.display=="block")?"none":"block"
+
 }
 
+/* MAP */
+
 const provincePos={
+
 "กรุงเทพ":{top:60,left:48},
 "เชียงใหม่":{top:25,left:40},
 "ขอนแก่น":{top:45,left:55},
 "อุบลราชธานี":{top:50,left:65},
-"นครราชสีมา":{top:55,left:55}
+"นครราชสีมา":{top:55,left:55},
+"ชลบุรี":{top:65,left:50}
+
 }
 
 function showProvince(p){
@@ -271,44 +273,87 @@ document.getElementById("mapDots").appendChild(dot)
 
 }
 
+/* APPLY */
+
 function applyJob(){
 
 let name=document.getElementById("name").value
+
 let age=document.getElementById("age").value
+
 let province=document.getElementById("province").value
+
+if(name==""||age==""||province==""){
+
+alert("กรุณากรอกข้อมูลให้ครบ")
+
+return
+
+}
+
+if(age<18){
+
+alert("รับเฉพาะผู้มีอายุ 18 ปีขึ้นไป")
+
+return
+
+}
 
 showProvince(province)
 
-let msg=
-"สมัครงาน Z8%0A"+
-"ชื่อ:"+name+"%0A"+
-"อายุ:"+age+"%0A"+
+let subject="ใบสมัครงาน Z8"
+
+let body=
+
+"สมัครงาน Z8\n\n"+
+"ชื่อ:"+name+"\n"+
+"อายุ:"+age+"\n"+
 "จังหวัด:"+province
 
-window.open("https://www.facebook.com/share/1AjenkCJkX/?text="+msg)
+window.location.href=
+
+"mailto:tt9297979@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body)
+
+setTimeout(()=>{
+
+let msg="มาจากวินขอทราบรายละเอียดงานเพิ่มเติม"
+
+window.open("https://www.facebook.com/share/1AjenkCJkX/?text="+encodeURIComponent(msg))
+
+},2000)
 
 }
+
+/* DASHBOARD */
 
 let income=12000
 
 setInterval(()=>{
+
 income+=Math.floor(Math.random()*200)
+
 document.getElementById("income").innerText=income+" บาท"
+
 },1000)
 
 let member=300
 
 setInterval(()=>{
+
 member+=Math.floor(Math.random()*3)-1
+
 document.getElementById("member").innerText=member
+
 },2000)
 
-/* เอฟเฟกต์พื้นหลัง */
+/* BACKGROUND */
 
 const canvas=document.getElementById("bg")
+
 const ctx=canvas.getContext("2d")
 
 canvas.width=window.innerWidth
+
 canvas.height=window.innerHeight
 
 let p=[]
@@ -316,10 +361,15 @@ let p=[]
 for(let i=0;i<120;i++){
 
 p.push({
+
 x:Math.random()*canvas.width,
+
 y:Math.random()*canvas.height,
+
 r:Math.random()*2,
+
 d:Math.random()*1
+
 })
 
 }
@@ -333,14 +383,19 @@ ctx.fillStyle="#00ffff"
 p.forEach(a=>{
 
 ctx.beginPath()
+
 ctx.arc(a.x,a.y,a.r,0,Math.PI*2)
+
 ctx.fill()
 
 a.y+=a.d
 
 if(a.y>canvas.height){
+
 a.y=0
+
 a.x=Math.random()*canvas.width
+
 }
 
 })
@@ -351,5 +406,4 @@ requestAnimationFrame(draw)
 
 draw()
 
-</script></body>
-</html>
+</script></body></html>
