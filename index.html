@@ -1,96 +1,93 @@
 <!DOCTYPE html><html lang="th">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Z8 Future Crew</title><style>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z8 DARK COMMAND CENTER</title><style>
 
 body{
 margin:0;
-font-family:Segoe UI,Arial;
-background:#050505;
-color:white;
+background:black;
+font-family:monospace;
+color:#00ff9c;
 overflow-x:hidden;
 }
 
-/* HEADER */
+/* MATRIX BACKGROUND */
 
-header{
-text-align:center;
-padding:40px;
-border-bottom:1px solid #222;
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
-.logo{
-font-size:42px;
-color:#00ffff;
-text-shadow:0 0 15px #00ffff;
+/* INTRO */
+
+#intro{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9999;
 }
 
-.subtitle{
-color:#aaa;
+.scanbox{
+width:500px;
+border:1px solid #00ff9c44;
+padding:20px;
+height:220px;
+overflow:hidden;
+background:#010101;
 }
 
-nav{
-margin-top:15px;
-}
-
-nav a{
-margin:10px;
-color:#00ffff;
-text-decoration:none;
+.enter{
+margin-top:20px;
+padding:15px 30px;
+background:#00ff9c;
+border:none;
+color:black;
 font-weight:bold;
+display:none;
+cursor:pointer;
 }
 
-/* SECTION */
+/* MAIN */
 
-.section{
+#main{
+display:none;
+padding:30px;
 max-width:1200px;
 margin:auto;
-padding:60px 20px;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
+gap:20px;
 }
 
 .card{
-background:#0a0a0a;
-border:1px solid #00ffff33;
-border-radius:15px;
-padding:25px;
+border:1px solid #00ff9c44;
+padding:20px;
+background:#020202;
 }
 
-/* FORM */
-
-.form-input{
-width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:8px;
-border:1px solid #00ffff44;
-background:#111;
-color:white;
+.big{
+font-size:28px;
 }
 
-button{
-background:#00ffff;
-border:none;
-padding:14px 25px;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-}
+/* TERMINAL */
 
-button:hover{
-box-shadow:0 0 15px #00ffff;
-}
-
-/* DASHBOARD */
-
-.counter{
-font-size:34px;
-color:#00ff9c;
-font-weight:bold;
+.terminal{
+border:1px solid #00ff9c44;
+padding:20px;
+height:200px;
+overflow:hidden;
+background:black;
 }
 
 /* MAP */
@@ -105,305 +102,225 @@ margin:auto;
 width:100%;
 }
 
-.team-dot{
+.dot{
 position:absolute;
-width:14px;
-height:14px;
-background:#00ffff;
+width:12px;
+height:12px;
+background:#00ff9c;
 border-radius:50%;
-box-shadow:0 0 12px #00ffff;
 animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
 0%{transform:scale(1)}
-50%{transform:scale(1.7)}
+50%{transform:scale(2)}
 100%{transform:scale(1)}
 }
 
-/* FLOAT CONTACT */
+/* CONTACT */
 
-.contact-float{
+.contact{
 position:fixed;
 right:20px;
 bottom:20px;
-z-index:999;
 }
 
-.contact-main{
-background:#00ffff;
-color:black;
-padding:14px 18px;
-border-radius:30px;
-cursor:pointer;
-}
-
-.contact-menu{
-display:none;
-margin-top:10px;
-}
-
-.contact-menu a{
+.contact a{
 display:block;
-background:#0084ff;
-color:white;
-padding:12px;
-border-radius:10px;
-margin-top:5px;
+background:#00ff9c;
+color:black;
+padding:10px;
+margin-top:6px;
 text-decoration:none;
 }
 
-/* NEWS TICKER */
+</style></head><body><canvas id="matrix"></canvas>
 
-.ticker{
-position:fixed;
-bottom:0;
-width:100%;
-background:black;
-border-top:1px solid #00ffff33;
-overflow:hidden;
-}
-
-.ticker-text{
-white-space:nowrap;
-display:inline-block;
-padding-left:100%;
-animation:ticker 25s linear infinite;
-}
-
-@keyframes ticker{
-0%{transform:translateX(0)}
-100%{transform:translateX(-100%)}
-}
-
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
-}
-
-</style></head><body><canvas id="bg"></canvas>
-
-<header><div class="logo">Z8 FUTURE CREW</div>
-<div class="subtitle">Online Opportunity Network</div><nav><a href="#about">เกี่ยวกับ</a>
-<a href="#apply">สมัครงาน</a>
-<a href="#dashboard">Dashboard</a>
-<a href="#team">ทีมงาน</a>
-
-</nav></header><section id="about" class="section"><h2>เกี่ยวกับองค์กร</h2><div class="grid"><div class="card">
-Z8 Future Crew เป็นเครือข่ายงานออนไลน์ที่เปิดโอกาสให้คนทั่วไปสามารถสร้างรายได้ผ่านอินเทอร์เน็ต
+<!-- INTRO --><div id="intro"><h2>Z8 NETWORK ACCESS</h2><div class="scanbox" id="scan"></div><div id="access"></div><button class="enter" id="enter" onclick="enterSystem()">
+ENTER COMMAND CENTER
+</button><audio autoplay>
+<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3">
+</audio></div><!-- MAIN --><div id="main"><h2>Z8 DARK COMMAND CENTER</h2><div class="grid"><div class="card">
+SYSTEM STATUS
+<div class="big">ONLINE</div>
 </div><div class="card">
-รายได้เฉลี่ยของสมาชิกอยู่ที่ประมาณ 2,000 – 3,000 บาทต่อวัน ขึ้นอยู่กับเวลาและความตั้งใจในการทำงาน
+NETWORK NODES
+<div class="big" id="nodes">0</div>
 </div><div class="card">
-<h3>ผู้บริหาร</h3>
-<p style="font-size:22px;color:#00ffff">JIMMY</p>
-Founder
-</div></div></section><section id="apply" class="section"><h2>สมัครงานออนไลน์</h2><div class="grid"><div class="card"><h3>คุณสมบัติ</h3>• อายุ 18 ปีขึ้นไป
+ACTIVE MEMBERS
+<div class="big" id="members">0</div>
+</div><div class="card">
+SYSTEM INCOME
+<div class="big" id="income">0</div>
+</div></div><br><h3>AI TERMINAL</h3><div class="terminal" id="terminal"></div><br><h3>JOIN ONLINE TEAM</h3><div class="grid"><div class="card"><h3>ลักษณะงานออนไลน์</h3>ทำงานผ่านมือถือหรือคอมพิวเตอร์
+ใช้อินเทอร์เน็ตในการทำงาน
+
+มีทีมงานสอนงานก่อนเริ่ม
+
+รายได้เฉลี่ย
+
+2,000 – 3,000 บาท / วัน
+
+</div><div class="card"><h3>คุณสมบัติผู้สมัคร</h3>• อายุ 18 ปีขึ้นไป
 • รับทุกอาชีพ
-• ใช้อินเทอร์เน็ตได้
+• ใช้มือถือหรือคอมพิวเตอร์ได้
+• มีอินเทอร์เน็ต
 
-</div><div class="card"><h3>ฟอร์มสมัคร</h3><input class="form-input" id="name" placeholder="ชื่อ"><input class="form-input" id="age" type="number" placeholder="อายุ"><input class="form-input" id="province" placeholder="จังหวัด"><button onclick="applyJob()">ส่งใบสมัคร</button>
+</div><div class="card"><h3>ข้อมูลที่ต้องเตรียม</h3>• ชื่อ
+• อายุ
+• จังหวัด
 
-</div></div></section><section id="dashboard" class="section"><h2>Dashboard</h2><div class="grid"><div class="card">
-รายได้วันนี้
-<div class="counter" id="income">0</div>
-</div><div class="card">
-สมาชิกออนไลน์
-<div class="counter" id="member">0</div>
-</div></div></section><section class="section"><h2>ตลาดการเงิน</h2><div id="chart"></div><script src="https://s3.tradingview.com/tv.js"></script><script>
+</div><div class="card"><h3>ขั้นตอนการสมัคร</h3>1. กดปุ่มติดต่อ HR
+2. ส่งข้อความ
 
-new TradingView.widget({
-width:"100%",
-height:500,
-symbol:"OANDA:XAUUSD",
-interval:"5",
-timezone:"Asia/Bangkok",
-theme:"dark",
-container_id:"chart"
-})
+</div><div class="card"><h3>ข้อความที่ต้องส่ง HR</h3><b>มาจากสายงาน "win"
+ขอทราบรายละเอียดงานเพิ่มเติม
 
-</script></section><section id="team" class="section"><h2>เครือข่ายทีมงานทั่วประเทศ</h2><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"><div id="mapDots"></div></div></section><div class="contact-float"><div class="contact-main" onclick="toggleContact()">
-ติดต่อทีมงาน
-</div><div class="contact-menu" id="menu"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
-ติดต่อ HR
+</b></div></div><br><h3>TEAM NETWORK MAP</h3><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"><div class="dot" style="top:60%;left:48%"></div>
+<div class="dot" style="top:50%;left:65%"></div>
+<div class="dot" style="top:25%;left:40%"></div></div></div><div class="contact"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
+HR
 </a><a href="https://www.facebook.com/share/1CLqS1ntem/" target="_blank">
-ติดต่อการตลาด
-</a></div></div><div class="ticker"><div class="ticker-text">ข่าวเศรษฐกิจ : ราคาทองคำผันผวน นักลงทุนทั่วโลกจับตานโยบายการเงินของธนาคารกลาง
+MARKETING
+</a></div><script>
 
-</div></div><script>
+/* INTRO SCAN */
 
-/* CONTACT */
+const scanLines=[
 
-function toggleContact(){
+"Initializing Z8 Network...",
+"Connecting Secure Server...",
+"Decrypting Nodes...",
+"Scanning Thailand Network...",
+"Node Bangkok Active",
+"Node Chiangmai Active",
+"Crypto Feed Linked",
+"Gold Market Linked",
+"Security Override...",
+"Access Granted..."
 
-let m=document.getElementById("menu")
+]
 
-m.style.display=(m.style.display=="block")?"none":"block"
+let s=0
 
-}
+function scan(){
 
-/* MAP */
+if(s<scanLines.length){
 
-const provincePos={
+document.getElementById("scan").innerHTML+=scanLines[s]+"<br>"
 
-"กรุงเทพ":{top:60,left:48},
-"เชียงใหม่":{top:25,left:40},
-"ขอนแก่น":{top:45,left:55},
-"อุบลราชธานี":{top:50,left:65},
-"นครราชสีมา":{top:55,left:55},
-"ชลบุรี":{top:65,left:50}
+s++
 
-}
+setTimeout(scan,700)
 
-function showProvince(p){
+}else{
 
-let pos=provincePos[p]
+document.getElementById("access").innerHTML="ACCESS GRANTED"
 
-if(!pos)return
-
-let dot=document.createElement("div")
-
-dot.className="team-dot"
-
-dot.style.top=pos.top+"%"
-dot.style.left=pos.left+"%"
-
-document.getElementById("mapDots").appendChild(dot)
+document.getElementById("enter").style.display="block"
 
 }
 
-/* APPLY */
-
-function applyJob(){
-
-let name=document.getElementById("name").value
-
-let age=document.getElementById("age").value
-
-let province=document.getElementById("province").value
-
-if(name==""||age==""||province==""){
-
-alert("กรุณากรอกข้อมูลให้ครบ")
-
-return
-
 }
 
-if(age<18){
+scan()
 
-alert("รับเฉพาะผู้มีอายุ 18 ปีขึ้นไป")
+function enterSystem(){
 
-return
+document.getElementById("intro").style.display="none"
 
-}
-
-showProvince(province)
-
-let subject="ใบสมัครงาน Z8"
-
-let body=
-
-"สมัครงาน Z8\n\n"+
-"ชื่อ:"+name+"\n"+
-"อายุ:"+age+"\n"+
-"จังหวัด:"+province
-
-window.location.href=
-
-"mailto:tt9297979@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body)
-
-setTimeout(()=>{
-
-let msg="มาจากวินขอทราบรายละเอียดงานเพิ่มเติม"
-
-window.open("https://www.facebook.com/share/1AjenkCJkX/?text="+encodeURIComponent(msg))
-
-},2000)
+document.getElementById("main").style.display="block"
 
 }
 
 /* DASHBOARD */
 
-let income=12000
-
 setInterval(()=>{
 
-income+=Math.floor(Math.random()*200)
+document.getElementById("nodes").innerText=
+Math.floor(Math.random()*500)
 
-document.getElementById("income").innerText=income+" บาท"
+document.getElementById("members").innerText=
+Math.floor(Math.random()*2000)
 
-},1000)
+document.getElementById("income").innerText=
+Math.floor(Math.random()*500000)+" ฿"
 
-let member=300
+},1500)
 
-setInterval(()=>{
+/* TERMINAL */
 
-member+=Math.floor(Math.random()*3)-1
+const tLines=[
 
-document.getElementById("member").innerText=member
+"> connect network",
+"> scanning nodes...",
+"> thailand node active",
+"> crypto feed linked",
+"> gold market linked",
+"> system monitoring...",
+"> ai protocol running"
 
-},2000)
+]
 
-/* BACKGROUND */
+let t=0
 
-const canvas=document.getElementById("bg")
+function terminal(){
 
-const ctx=canvas.getContext("2d")
+if(t<tLines.length){
 
-canvas.width=window.innerWidth
+document.getElementById("terminal").innerHTML+=tLines[t]+"<br>"
 
-canvas.height=window.innerHeight
+t++
 
-let p=[]
-
-for(let i=0;i<120;i++){
-
-p.push({
-
-x:Math.random()*canvas.width,
-
-y:Math.random()*canvas.height,
-
-r:Math.random()*2,
-
-d:Math.random()*1
-
-})
+setTimeout(terminal,900)
 
 }
+
+}
+
+terminal()
+
+/* MATRIX */
+
+const c=document.getElementById("matrix")
+const ctx=c.getContext("2d")
+
+c.height=window.innerHeight
+c.width=window.innerWidth
+
+const letters="01"
+const font=14
+const columns=c.width/font
+
+const drops=[]
+
+for(let x=0;x<columns;x++)
+drops[x]=1
 
 function draw(){
 
-ctx.clearRect(0,0,canvas.width,canvas.height)
+ctx.fillStyle="rgba(0,0,0,0.05)"
+ctx.fillRect(0,0,c.width,c.height)
 
-ctx.fillStyle="#00ffff"
+ctx.fillStyle="#00ff9c"
+ctx.font=font+"px monospace"
 
-p.forEach(a=>{
+for(let i=0;i<drops.length;i++){
 
-ctx.beginPath()
+const text=letters[Math.floor(Math.random()*letters.length)]
 
-ctx.arc(a.x,a.y,a.r,0,Math.PI*2)
+ctx.fillText(text,i*font,drops[i]*font)
 
-ctx.fill()
+if(drops[i]*font>c.height&&Math.random()>0.975)
+drops[i]=0
 
-a.y+=a.d
-
-if(a.y>canvas.height){
-
-a.y=0
-
-a.x=Math.random()*canvas.width
+drops[i]++
 
 }
 
-})
-
-requestAnimationFrame(draw)
-
 }
 
-draw()
+setInterval(draw,33)
 
-</script></body></html>
+</script></body>
+</html>
