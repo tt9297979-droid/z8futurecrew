@@ -2,122 +2,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Z8 DARK COMMAND CENTER</title><style>
+<title>Z8 Future Network</title><style>
 
 body{
 margin:0;
-background:black;
-font-family:monospace;
-color:#00ff9c;
-overflow-x:hidden;
+font-family:Arial, Helvetica, sans-serif;
+background:#f5f7fb;
+color:#333;
 }
 
-/* MATRIX BACKGROUND */
+/* HEADER */
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
-}
-
-/* INTRO */
-
-#intro{
-position:fixed;
-width:100%;
-height:100%;
-background:black;
+header{
+background:white;
+padding:20px 40px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
 display:flex;
-flex-direction:column;
+justify-content:space-between;
 align-items:center;
-justify-content:center;
-z-index:9999;
 }
 
-.scanbox{
-width:500px;
-border:1px solid #00ff9c44;
-padding:20px;
-height:220px;
-overflow:hidden;
-background:#010101;
-}
-
-.enter{
-margin-top:20px;
-padding:15px 30px;
-background:#00ff9c;
-border:none;
-color:black;
+.logo{
+font-size:24px;
 font-weight:bold;
-display:none;
-cursor:pointer;
+color:#0077ff;
 }
 
-/* MAIN */
+nav a{
+margin-left:20px;
+text-decoration:none;
+color:#333;
+font-weight:600;
+}
 
-#main{
-display:none;
-padding:30px;
-max-width:1200px;
+/* HERO */
+
+.hero{
+padding:80px 20px;
+text-align:center;
+background:linear-gradient(120deg,#0077ff,#00c6ff);
+color:white;
+}
+
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+/* SECTION */
+
+.section{
+max-width:1100px;
 margin:auto;
+padding:60px 20px;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
+gap:25px;
 }
 
 .card{
-border:1px solid #00ff9c44;
-padding:20px;
-background:#020202;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
-.big{
+.card h3{
+margin-top:0;
+color:#0077ff;
+}
+
+/* DASHBOARD */
+
+.stat{
 font-size:28px;
-}
-
-/* TERMINAL */
-
-.terminal{
-border:1px solid #00ff9c44;
-padding:20px;
-height:200px;
-overflow:hidden;
-background:black;
+font-weight:bold;
+color:#0077ff;
 }
 
 /* MAP */
 
 .map-container{
-position:relative;
-max-width:700px;
-margin:auto;
+text-align:center;
 }
 
 .map-container img{
 width:100%;
+max-width:650px;
 }
 
-.dot{
-position:absolute;
-width:12px;
-height:12px;
-background:#00ff9c;
-border-radius:50%;
-animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1)}
-50%{transform:scale(2)}
-100%{transform:scale(1)}
-}
-
-/* CONTACT */
+/* CONTACT BUTTON */
 
 .contact{
 position:fixed;
@@ -127,200 +104,75 @@ bottom:20px;
 
 .contact a{
 display:block;
-background:#00ff9c;
-color:black;
-padding:10px;
+background:#0077ff;
+color:white;
+padding:12px 18px;
+border-radius:8px;
 margin-top:6px;
 text-decoration:none;
+font-weight:bold;
 }
 
-</style></head><body><canvas id="matrix"></canvas>
+footer{
+text-align:center;
+padding:30px;
+background:#222;
+color:white;
+margin-top:40px;
+}
 
-<!-- INTRO --><div id="intro"><h2>Z8 NETWORK ACCESS</h2><div class="scanbox" id="scan"></div><div id="access"></div><button class="enter" id="enter" onclick="enterSystem()">
-ENTER COMMAND CENTER
-</button><audio autoplay>
-<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3">
-</audio></div><!-- MAIN --><div id="main"><h2>Z8 DARK COMMAND CENTER</h2><div class="grid"><div class="card">
-SYSTEM STATUS
-<div class="big">ONLINE</div>
+</style></head><body><header><div class="logo">
+Z8 Future Network
+</div><nav>
+<a href="#about">เกี่ยวกับ</a>
+<a href="#work">งานออนไลน์</a>
+<a href="#join">สมัครงาน</a>
+<a href="#team">ทีมงาน</a>
+</nav></header><section class="hero"><h1>Online Opportunity Platform</h1><p>
+แพลตฟอร์มเครือข่ายงานออนไลน์สำหรับผู้ที่ต้องการสร้างรายได้ผ่านอินเทอร์เน็ต
+</p></section><section id="about" class="section"><h2>เกี่ยวกับองค์กร</h2><div class="grid"><div class="card">
+Z8 Future Network เป็นเครือข่ายงานออนไลน์ที่เปิดโอกาสให้บุคคลทั่วไปสามารถสร้างรายได้ผ่านระบบอินเทอร์เน็ต
 </div><div class="card">
-NETWORK NODES
-<div class="big" id="nodes">0</div>
+เรามุ่งเน้นการทำงานเป็นทีม พร้อมมีระบบสอนงานและทีมงานให้คำแนะนำสำหรับสมาชิกใหม่
 </div><div class="card">
-ACTIVE MEMBERS
-<div class="big" id="members">0</div>
-</div><div class="card">
-SYSTEM INCOME
-<div class="big" id="income">0</div>
-</div></div><br><h3>AI TERMINAL</h3><div class="terminal" id="terminal"></div><br><h3>JOIN ONLINE TEAM</h3><div class="grid"><div class="card"><h3>ลักษณะงานออนไลน์</h3>ทำงานผ่านมือถือหรือคอมพิวเตอร์
-ใช้อินเทอร์เน็ตในการทำงาน
+<h3>ผู้บริหาร</h3>
+Jimmy  
+Founder
+</div></div></section><section id="work" class="section"><h2>ลักษณะงานออนไลน์</h2><div class="grid"><div class="card"><h3>รูปแบบการทำงาน</h3>• ทำงานผ่านมือถือหรือคอมพิวเตอร์
+• ใช้อินเทอร์เน็ตเป็นหลัก
+• มีทีมงานสอนงานก่อนเริ่ม
 
-มีทีมงานสอนงานก่อนเริ่ม
+</div><div class="card"><h3>รายได้เฉลี่ย</h3>รายได้เฉลี่ยของสมาชิกอยู่ที่ประมาณ
 
-รายได้เฉลี่ย
+<b>2,000 – 3,000 บาท / วัน</b>
 
-2,000 – 3,000 บาท / วัน
+ขึ้นอยู่กับเวลาและความตั้งใจในการทำงาน
 
-</div><div class="card"><h3>คุณสมบัติผู้สมัคร</h3>• อายุ 18 ปีขึ้นไป
+</div><div class="card"><h3>เหมาะสำหรับ</h3>• พนักงานประจำ
+• ฟรีแลนซ์
+• นักศึกษา
+• ผู้ที่ต้องการรายได้เสริม
+
+</div></div></section><section id="join" class="section"><h2>การสมัครเข้าร่วม</h2><div class="grid"><div class="card"><h3>คุณสมบัติผู้สมัคร</h3>• อายุ 18 ปีขึ้นไป
 • รับทุกอาชีพ
-• ใช้มือถือหรือคอมพิวเตอร์ได้
+• สามารถใช้มือถือหรือคอมพิวเตอร์ได้
 • มีอินเทอร์เน็ต
 
 </div><div class="card"><h3>ข้อมูลที่ต้องเตรียม</h3>• ชื่อ
 • อายุ
 • จังหวัด
 
-</div><div class="card"><h3>ขั้นตอนการสมัคร</h3>1. กดปุ่มติดต่อ HR
-2. ส่งข้อความ
+</div><div class="card"><h3>ขั้นตอนการสมัคร</h3>1. ติดต่อ HR ผ่านปุ่มด้านล่าง
+2. ส่งข้อความตามตัวอย่าง
 
-</div><div class="card"><h3>ข้อความที่ต้องส่ง HR</h3><b>มาจากสายงาน "win"
+<b>มาจากสายงาน "win"
 ขอทราบรายละเอียดงานเพิ่มเติม
 
-</b></div></div><br><h3>TEAM NETWORK MAP</h3><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"><div class="dot" style="top:60%;left:48%"></div>
-<div class="dot" style="top:50%;left:65%"></div>
-<div class="dot" style="top:25%;left:40%"></div></div></div><div class="contact"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
-HR
+</b></div></div></section><section id="team" class="section"><h2>เครือข่ายทีมงาน</h2><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"></div></section><div class="contact"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
+ติดต่อ HR
 </a><a href="https://www.facebook.com/share/1CLqS1ntem/" target="_blank">
-MARKETING
-</a></div><script>
+ติดต่อการตลาด
+</a></div><footer>© 2026 Z8 Future Network
 
-/* INTRO SCAN */
-
-const scanLines=[
-
-"Initializing Z8 Network...",
-"Connecting Secure Server...",
-"Decrypting Nodes...",
-"Scanning Thailand Network...",
-"Node Bangkok Active",
-"Node Chiangmai Active",
-"Crypto Feed Linked",
-"Gold Market Linked",
-"Security Override...",
-"Access Granted..."
-
-]
-
-let s=0
-
-function scan(){
-
-if(s<scanLines.length){
-
-document.getElementById("scan").innerHTML+=scanLines[s]+"<br>"
-
-s++
-
-setTimeout(scan,700)
-
-}else{
-
-document.getElementById("access").innerHTML="ACCESS GRANTED"
-
-document.getElementById("enter").style.display="block"
-
-}
-
-}
-
-scan()
-
-function enterSystem(){
-
-document.getElementById("intro").style.display="none"
-
-document.getElementById("main").style.display="block"
-
-}
-
-/* DASHBOARD */
-
-setInterval(()=>{
-
-document.getElementById("nodes").innerText=
-Math.floor(Math.random()*500)
-
-document.getElementById("members").innerText=
-Math.floor(Math.random()*2000)
-
-document.getElementById("income").innerText=
-Math.floor(Math.random()*500000)+" ฿"
-
-},1500)
-
-/* TERMINAL */
-
-const tLines=[
-
-"> connect network",
-"> scanning nodes...",
-"> thailand node active",
-"> crypto feed linked",
-"> gold market linked",
-"> system monitoring...",
-"> ai protocol running"
-
-]
-
-let t=0
-
-function terminal(){
-
-if(t<tLines.length){
-
-document.getElementById("terminal").innerHTML+=tLines[t]+"<br>"
-
-t++
-
-setTimeout(terminal,900)
-
-}
-
-}
-
-terminal()
-
-/* MATRIX */
-
-const c=document.getElementById("matrix")
-const ctx=c.getContext("2d")
-
-c.height=window.innerHeight
-c.width=window.innerWidth
-
-const letters="01"
-const font=14
-const columns=c.width/font
-
-const drops=[]
-
-for(let x=0;x<columns;x++)
-drops[x]=1
-
-function draw(){
-
-ctx.fillStyle="rgba(0,0,0,0.05)"
-ctx.fillRect(0,0,c.width,c.height)
-
-ctx.fillStyle="#00ff9c"
-ctx.font=font+"px monospace"
-
-for(let i=0;i<drops.length;i++){
-
-const text=letters[Math.floor(Math.random()*letters.length)]
-
-ctx.fillText(text,i*font,drops[i]*font)
-
-if(drops[i]*font>c.height&&Math.random()>0.975)
-drops[i]=0
-
-drops[i]++
-
-}
-
-}
-
-setInterval(draw,33)
-
-</script></body>
+</footer></body>
 </html>
