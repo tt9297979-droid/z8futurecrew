@@ -7,7 +7,7 @@
 body{
 margin:0;
 font-family:Arial, Helvetica, sans-serif;
-background:#f5f7fb;
+background:#f4f7fb;
 color:#333;
 }
 
@@ -16,10 +16,10 @@ color:#333;
 header{
 background:white;
 padding:20px 40px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
 display:flex;
 justify-content:space-between;
 align-items:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
 .logo{
@@ -38,10 +38,10 @@ font-weight:600;
 /* HERO */
 
 .hero{
-padding:80px 20px;
-text-align:center;
 background:linear-gradient(120deg,#0077ff,#00c6ff);
 color:white;
+text-align:center;
+padding:80px 20px;
 }
 
 .hero h1{
@@ -70,17 +70,13 @@ border-radius:10px;
 box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
-.card h3{
-margin-top:0;
-color:#0077ff;
-}
-
 /* DASHBOARD */
 
 .stat{
-font-size:28px;
+font-size:32px;
 font-weight:bold;
 color:#0077ff;
+margin-top:10px;
 }
 
 /* MAP */
@@ -94,7 +90,7 @@ width:100%;
 max-width:650px;
 }
 
-/* CONTACT BUTTON */
+/* CONTACT */
 
 .contact{
 position:fixed;
@@ -113,6 +109,29 @@ text-decoration:none;
 font-weight:bold;
 }
 
+/* NEWS TICKER */
+
+.ticker{
+position:fixed;
+bottom:0;
+width:100%;
+background:#111;
+color:white;
+overflow:hidden;
+}
+
+.ticker-text{
+white-space:nowrap;
+display:inline-block;
+padding-left:100%;
+animation:ticker 30s linear infinite;
+}
+
+@keyframes ticker{
+0%{transform:translateX(0)}
+100%{transform:translateX(-100%)}
+}
+
 footer{
 text-align:center;
 padding:30px;
@@ -121,30 +140,30 @@ color:white;
 margin-top:40px;
 }
 
-</style></head><body><header><div class="logo">
-Z8 Future Network
-</div><nav>
+</style></head><body><header><div class="logo">Z8 Future Network</div><nav>
 <a href="#about">เกี่ยวกับ</a>
+<a href="#dashboard">สถิติ</a>
 <a href="#work">งานออนไลน์</a>
 <a href="#join">สมัครงาน</a>
-<a href="#team">ทีมงาน</a>
 </nav></header><section class="hero"><h1>Online Opportunity Platform</h1><p>
 แพลตฟอร์มเครือข่ายงานออนไลน์สำหรับผู้ที่ต้องการสร้างรายได้ผ่านอินเทอร์เน็ต
-</p></section><section id="about" class="section"><h2>เกี่ยวกับองค์กร</h2><div class="grid"><div class="card">
-Z8 Future Network เป็นเครือข่ายงานออนไลน์ที่เปิดโอกาสให้บุคคลทั่วไปสามารถสร้างรายได้ผ่านระบบอินเทอร์เน็ต
+</p></section><section id="dashboard" class="section"><h2>สถิติระบบ</h2><div class="grid"><div class="card">
+สมาชิกออนไลน์
+<div class="stat" id="members">0</div>
 </div><div class="card">
-เรามุ่งเน้นการทำงานเป็นทีม พร้อมมีระบบสอนงานและทีมงานให้คำแนะนำสำหรับสมาชิกใหม่
+รายได้วันนี้
+<div class="stat" id="todayIncome">0</div>
 </div><div class="card">
-<h3>ผู้บริหาร</h3>
-Jimmy  
-Founder
+รายได้รวมระบบ
+<div class="stat" id="totalIncome">0</div>
+</div><div class="card">
+ผู้สมัครใหม่วันนี้
+<div class="stat" id="newUsers">0</div>
 </div></div></section><section id="work" class="section"><h2>ลักษณะงานออนไลน์</h2><div class="grid"><div class="card"><h3>รูปแบบการทำงาน</h3>• ทำงานผ่านมือถือหรือคอมพิวเตอร์
 • ใช้อินเทอร์เน็ตเป็นหลัก
 • มีทีมงานสอนงานก่อนเริ่ม
 
-</div><div class="card"><h3>รายได้เฉลี่ย</h3>รายได้เฉลี่ยของสมาชิกอยู่ที่ประมาณ
-
-<b>2,000 – 3,000 บาท / วัน</b>
+</div><div class="card"><h3>รายได้เฉลี่ย</h3>2,000 – 3,000 บาท / วัน
 
 ขึ้นอยู่กับเวลาและความตั้งใจในการทำงาน
 
@@ -155,24 +174,49 @@ Founder
 
 </div></div></section><section id="join" class="section"><h2>การสมัครเข้าร่วม</h2><div class="grid"><div class="card"><h3>คุณสมบัติผู้สมัคร</h3>• อายุ 18 ปีขึ้นไป
 • รับทุกอาชีพ
-• สามารถใช้มือถือหรือคอมพิวเตอร์ได้
+• ใช้มือถือหรือคอมพิวเตอร์ได้
 • มีอินเทอร์เน็ต
 
 </div><div class="card"><h3>ข้อมูลที่ต้องเตรียม</h3>• ชื่อ
 • อายุ
 • จังหวัด
 
-</div><div class="card"><h3>ขั้นตอนการสมัคร</h3>1. ติดต่อ HR ผ่านปุ่มด้านล่าง
-2. ส่งข้อความตามตัวอย่าง
+</div><div class="card"><h3>ขั้นตอนการสมัคร</h3>1. ติดต่อ HR
+2. ส่งข้อความ
 
 <b>มาจากสายงาน "win"
 ขอทราบรายละเอียดงานเพิ่มเติม
 
-</b></div></div></section><section id="team" class="section"><h2>เครือข่ายทีมงาน</h2><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"></div></section><div class="contact"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
+</b></div></div></section><section class="section"><h2>เครือข่ายทีมงาน</h2><div class="map-container"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Thailand_location_map.svg/1200px-Thailand_location_map.svg.png"></div></section><div class="contact"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">
 ติดต่อ HR
 </a><a href="https://www.facebook.com/share/1CLqS1ntem/" target="_blank">
 ติดต่อการตลาด
-</a></div><footer>© 2026 Z8 Future Network
+</a></div><div class="ticker"><div class="ticker-text">ข่าวเศรษฐกิจ : ราคาทองคำปรับตัวขึ้น นักลงทุนจับตานโยบายธนาคารกลาง | ตลาดคริปโตเคลื่อนไหวต่อเนื่อง | เศรษฐกิจดิจิทัลเติบโตทั่วโลก
 
-</footer></body>
+</div></div><footer>© 2026 Z8 Future Network
+
+</footer><script>
+
+/* DASHBOARD ANIMATION */
+
+let members=350
+let todayIncome=24000
+let totalIncome=3500000
+let newUsers=15
+
+setInterval(()=>{
+
+members+=Math.floor(Math.random()*5-2)
+todayIncome+=Math.floor(Math.random()*200)
+totalIncome+=Math.floor(Math.random()*1000)
+newUsers+=Math.floor(Math.random()*2)
+
+document.getElementById("members").innerText=members
+document.getElementById("todayIncome").innerText=todayIncome+" บาท"
+document.getElementById("totalIncome").innerText=totalIncome+" บาท"
+document.getElementById("newUsers").innerText=newUsers
+
+},1500)
+
+</script></body>
 </html>
