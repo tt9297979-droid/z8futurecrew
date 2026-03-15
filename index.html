@@ -1,274 +1,213 @@
-<!DOCTYPE html><html lang="th">
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Z8 Online Platform</title><style>
+<title>Baccarat Screen Analyzer</title>
+
+<style>
 
 body{
-margin:0;
+background:#0b0f1a;
+color:white;
 font-family:Arial;
-background:#f5f7fb;
-color:#333;
+text-align:center
 }
 
-/* HEADER */
-
-header{
-background:white;
-padding:20px 40px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 2px 8px rgba(0,0,0,0.08);
+h1{
+margin:20px
 }
 
-.logo{
-font-size:22px;
-font-weight:bold;
-color:#2563eb;
-}
-
-nav a{
-margin-left:20px;
-text-decoration:none;
-color:#333;
-font-weight:600;
-}
-
-/* HERO */
-
-.hero{
-background:linear-gradient(120deg,#2563eb,#4f46e5);
-color:white;
-text-align:center;
-padding:80px 20px;
-}
-
-.hero h1{
-font-size:38px;
-}
-
-/* SECTION */
-
-.section{
-max-width:1100px;
-margin:auto;
-padding:60px 20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-
-.card{
-background:white;
-padding:25px;
-border-radius:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-6px);
-}
-
-/* STATS */
-
-.stat{
-font-size:30px;
-font-weight:bold;
-color:#2563eb;
-margin-top:10px;
-}
-
-/* CONTACT BUTTON */
-
-.contact{
-position:fixed;
-right:20px;
-bottom:20px;
-}
-
-.contact a{
-display:block;
-background:#2563eb;
-color:white;
-padding:12px 18px;
+button{
+padding:12px 25px;
+font-size:16px;
+background:#00c3ff;
+border:none;
 border-radius:8px;
-margin-top:6px;
-text-decoration:none;
-font-weight:bold;
+cursor:pointer
 }
 
-/* ACTIVITY */
+.container{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:30px
+}
 
-.activity{
-background:white;
+.panel{
+background:#151b2e;
 padding:20px;
+border-radius:12px
+}
+
+table{
+border-collapse:collapse
+}
+
+td{
+width:22px;
+height:22px;
+border:1px solid #333
+}
+
+.red{background:#ff3d3d}
+.blue{background:#2979ff}
+
+video{
 border-radius:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-height:200px;
-overflow:hidden;
+margin-top:20px
 }
 
-.activity p{
-margin:6px 0;
-font-size:14px;
-}
+</style>
 
-/* NEWS */
+</head>
 
-.ticker{
-position:fixed;
-bottom:0;
-width:100%;
-background:#111;
-color:white;
-overflow:hidden;
-}
+<body>
 
-.ticker-text{
-white-space:nowrap;
-display:inline-block;
-padding-left:100%;
-animation:ticker 30s linear infinite;
-}
+<h1>Baccarat AI Screen Analyzer</h1>
 
-@keyframes ticker{
-0%{transform:translateX(0)}
-100%{transform:translateX(-100%)}
-}
+<button onclick="startCapture()">Share Screen</button>
 
-footer{
-text-align:center;
-padding:30px;
-background:#222;
-color:white;
-margin-top:40px;
-}
+<br><br>
 
-</style></head><body><header><div class="logo">Z8 Online Platform</div><nav><a href="#dashboard">Dashboard</a>
-<a href="#work">งานออนไลน์</a>
-<a href="#apply">สมัครงาน</a>
+<video id="video" width="400" autoplay muted></video>
 
-</nav></header><section class="hero"><h1>Online Opportunity Platform</h1><p>แพลตฟอร์มงานออนไลน์สำหรับผู้ที่ต้องการสร้างรายได้ผ่านอินเทอร์เน็ต
+<div class="container">
 
-</p><p>รายได้เฉลี่ย 2,000 – 3,000 บาทต่อวัน
+<div class="panel">
+<h3>Big Road</h3>
+<table id="bigroad"></table>
+</div>
 
-</p></section><section id="dashboard" class="section"><h2>Dashboard ระบบ</h2><div class="grid"><div class="card">สมาชิกออนไลน์
+</div>
 
-<div class="stat" id="members">0</div></div><div class="card">รายได้วันนี้
+<script>
 
-<div class="stat" id="todayIncome">0</div></div><div class="card">รายได้รวม
+let results=[]
 
-<div class="stat" id="totalIncome">0</div></div><div class="card">รอตัดยอด
+async function startCapture(){
 
-<div class="stat" id="pending">0</div></div></div></section><section id="work" class="section"><h2>ลักษณะงานออนไลน์</h2><div class="grid"><div class="card"><h3>รูปแบบการทำงาน</h3>ทำงานผ่านมือถือหรือคอมพิวเตอร์
-ใช้อินเทอร์เน็ตเป็นหลัก
-มีทีมงานสอนงานก่อนเริ่ม
+const stream=await navigator.mediaDevices.getDisplayMedia({
+video:true
+})
 
-</div><div class="card"><h3>รายได้</h3>เฉลี่ย 2,000 – 3,000 บาท / วัน
-ขึ้นอยู่กับเวลาและความตั้งใจ
+const video=document.getElementById("video")
+video.srcObject=stream
 
-</div><div class="card"><h3>เหมาะสำหรับ</h3>พนักงานประจำ
-ฟรีแลนซ์
-นักศึกษา
-ผู้ต้องการรายได้เสริม
-
-</div></div></section><section id="apply" class="section"><h2>การสมัครงาน</h2><div class="grid"><div class="card"><h3>คุณสมบัติ</h3>อายุ 18 ปีขึ้นไป
-รับทุกอาชีพ
-มีมือถือหรือคอมพิวเตอร์
-มีอินเทอร์เน็ต
-
-</div><div class="card"><h3>ข้อมูลที่ต้องเตรียม</h3>ชื่อ
-อายุ
-จังหวัด
-
-</div><div class="card"><h3>ติดต่อ HR</h3>ส่งข้อความ
-
-<b>มาจากวิน ขอทราบรายละเอียดงานเพิ่มเติม
-
-</b></div></div></section><section class="section"><h2>กิจกรรมระบบ</h2><div class="activity" id="activity"></div></section><div class="contact"><a href="https://www.facebook.com/share/1AjenkCJkX/" target="_blank">ติดต่อ HR
-
-</a><a href="https://www.facebook.com/share/1CLqS1ntem/" target="_blank">ฝ่ายการตลาด
-
-</a></div><div class="ticker"><div class="ticker-text">ข่าวเศรษฐกิจ : ตลาดทองคำผันผวน | เศรษฐกิจดิจิทัลเติบโตทั่วโลก | การลงทุนออนไลน์ได้รับความสนใจเพิ่มขึ้น
-
-</div></div><footer>© 2026 Z8 Platform
-
-</footer><script>
-
-let members=350
-let today=25000
-let total=3200000
-let pending=15000
-
-setInterval(()=>{
-
-members+=Math.floor(Math.random()*4-2)
-today+=Math.floor(Math.random()*200)
-total+=Math.floor(Math.random()*500)
-pending+=Math.floor(Math.random()*100)
-
-document.getElementById("members").innerText=members
-document.getElementById("todayIncome").innerText=today+" บาท"
-document.getElementById("totalIncome").innerText=total+" บาท"
-document.getElementById("pending").innerText=pending+" บาท"
-
-},1500)
-
-const log=[
-"User_123 ตรวจสอบยอดรายได้",
-"User_551 ทำรายการสำเร็จ +450 บาท",
-"User_778 เข้าระบบ",
-"System Sync สำเร็จ"
-]
-
-function addLog(){
-
-let el=document.getElementById("activity")
-
-let msg=log[Math.floor(Math.random()*log.length)]
-
-let p=document.createElement("p")
-
-p.innerText=msg
-
-el.prepend(p)
+setInterval(()=>scanFrame(video),2000)
 
 }
 
-setInterval(addLog,2000)
+function scanFrame(video){
 
-</script></body>
+const canvas=document.createElement("canvas")
+canvas.width=video.videoWidth
+canvas.height=video.videoHeight
+
+const ctx=canvas.getContext("2d")
+
+ctx.drawImage(video,0,0)
+
+const img=ctx.getImageData(0,0,canvas.width,canvas.height)
+
+let redCount=0
+let blueCount=0
+
+for(let i=0;i<img.data.length;i+=40){
+
+let r=img.data[i]
+let g=img.data[i+1]
+let b=img.data[i+2]
+
+if(r>200 && g<100 && b<100) redCount++
+if(b>200 && r<100 && g<100) blueCount++
+
+}
+
+if(redCount>blueCount && redCount>500){
+
+addResult("B")
+
+}else if(blueCount>redCount && blueCount>500){
+
+addResult("P")
+
+}
+
+}
+
+function addResult(r){
+
+if(results[results.length-1]===r) return
+
+results.push(r)
+
+update()
+
+}
+
+function buildBigRoad(data){
+
+let road=[[]]
+
+data.forEach(r=>{
+
+let col=road[road.length-1]
+let last=col[col.length-1]
+
+if(last===r){
+
+col.push(r)
+
+}else{
+
+road.push([r])
+
+}
+
+})
+
+return road
+
+}
+
+function render(table,data){
+
+table.innerHTML=""
+
+for(let y=0;y<6;y++){
+
+let tr=document.createElement("tr")
+
+for(let x=0;x<data.length;x++){
+
+let td=document.createElement("td")
+
+if(data[x][y]){
+
+if(data[x][y]==="B") td.className="red"
+if(data[x][y]==="P") td.className="blue"
+
+}
+
+tr.appendChild(td)
+
+}
+
+table.appendChild(tr)
+
+}
+
+}
+
+function update(){
+
+let road=buildBigRoad(results)
+
+render(document.getElementById("bigroad"),road)
+
+}
+
+</script>
+
+</body>
 </html>
-<section class="section">
-
-<h2>คณะผู้บริหาร</h2>
-
-<div class="grid">
-
-<div class="card" style="text-align:center">
-
-<img src="https://i.imgur.com/8Km9tLL.jpg"
-style="width:120px;border-radius:100px;margin-bottom:10px;">
-
-<h3>JIMMY</h3>
-
-<p><b>Founder & Executive Director</b></p>
-
-<p>
-
-ผู้ก่อตั้งแพลตฟอร์ม Z8 Online Platform
-มุ่งพัฒนาระบบงานออนไลน์ที่ช่วยให้ผู้คนสามารถสร้างรายได้ผ่านอินเทอร์เน็ตได้อย่างมีประสิทธิภาพ
-พร้อมขยายเครือข่ายทีมงานทั่วประเทศ
-
-</p>
-
-</div>
-
-</div>
-
-</section>
