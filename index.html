@@ -2,19 +2,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Baccarat Evolution Style</title>
+<title>Baccarat AI Analyzer</title>
 
 <style>
 
 body{
-background:#0d0f14;
+background:#0b0f1a;
 color:white;
 font-family:Arial;
 margin:0;
 }
 
 .header{
-background:#151821;
+background:#141824;
 padding:15px;
 display:flex;
 justify-content:space-between;
@@ -27,12 +27,12 @@ color:#ffd700;
 }
 
 .controls button{
-margin:5px;
 padding:8px 15px;
+margin:5px;
 border:none;
 border-radius:6px;
-font-weight:bold;
 cursor:pointer;
+font-weight:bold;
 }
 
 .banker{background:#d32f2f;color:white}
@@ -41,29 +41,31 @@ cursor:pointer;
 
 .dashboard{
 display:flex;
-gap:20px;
+gap:15px;
 padding:15px;
 background:#11141b;
+flex-wrap:wrap;
 }
 
 .card{
 background:#1b1f2b;
 padding:10px 15px;
 border-radius:8px;
+min-width:160px;
 }
 
 .roadmap{
-padding:20px;
 display:flex;
 gap:20px;
-flex-wrap:wrap;
 justify-content:center;
+padding:20px;
+flex-wrap:wrap;
 }
 
 .panel{
 background:white;
 padding:10px;
-border-radius:6px;
+border-radius:8px;
 }
 
 .panel h3{
@@ -80,8 +82,6 @@ td{
 width:24px;
 height:24px;
 border:1px solid #ddd;
-text-align:center;
-vertical-align:middle;
 }
 
 .circle{
@@ -101,20 +101,20 @@ border-radius:10px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="header">
 
-<div class="title">Baccarat Analyzer</div>
+<div class="title">Baccarat AI Analyzer</div>
 
 <div class="controls">
 
 <button class="banker" onclick="addResult('B')">Banker</button>
 <button class="player" onclick="addResult('P')">Player</button>
 <button class="tie" onclick="addResult('T')">Tie</button>
-
 <button onclick="resetGame()">Reset</button>
 
 </div>
@@ -126,6 +126,7 @@ border-radius:10px;
 <div class="card" id="pattern"></div>
 <div class="card" id="trend"></div>
 <div class="card" id="percent"></div>
+<div class="card" id="probability"></div>
 
 </div>
 
@@ -197,6 +198,7 @@ road.push([r])
 })
 
 return road
+
 }
 
 function render(table,data){
@@ -240,14 +242,19 @@ let res=[]
 for(let i=skip;i<road.length;i++){
 
 if(road[i-1].length===road[i-skip].length){
+
 res.push(["B"])
+
 }else{
+
 res.push(["P"])
+
 }
 
 }
 
 return res
+
 }
 
 function detectPattern(){
@@ -286,7 +293,40 @@ let t=results.filter(x=>x==="T").length
 
 let total=results.length||1
 
-return `Banker ${Math.round(b/total*100)}% | Player ${Math.round(p/total*100)}% | Tie ${Math.round(t/total*100)}%`
+return `Stats → B ${Math.round(b/total*100)}% | P ${Math.round(p/total*100)}% | T ${Math.round(t/total*100)}%`
+
+}
+
+function analyzeProbability(){
+
+let b=results.filter(x=>x==="B").length
+let p=results.filter(x=>x==="P").length
+
+let total=results.length||1
+
+let bankerRate=b/total
+let playerRate=p/total
+
+let last10=results.slice(-10)
+
+let bTrend=last10.filter(x=>x==="B").length
+let pTrend=last10.filter(x=>x==="P").length
+
+let weight=0.2
+
+let bankerProb=bankerRate+(bTrend/10)*weight
+let playerProb=playerRate+(pTrend/10)*weight
+
+let sum=bankerProb+playerProb
+
+bankerProb/=sum
+playerProb/=sum
+
+return{
+banker:Math.round(bankerProb*100),
+player:Math.round(playerProb*100)
+}
+
 }
 
 function drawGraph(){
@@ -337,6 +377,11 @@ render(document.getElementById("cockroach"),cock)
 document.getElementById("pattern").innerText=detectPattern()
 document.getElementById("trend").innerText=detectTrend()
 document.getElementById("percent").innerText=calcPercent()
+
+let prob=analyzeProbability()
+
+document.getElementById("probability").innerText=
+"Win Chance → Banker "+prob.banker+"% | Player "+prob.player+"%"
 
 drawGraph()
 
