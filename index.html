@@ -2,101 +2,39 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Baccarat AI Analyzer PRO</title>
+<title>PromptPay QR Generator</title>
+
+<script src="https://cdn.jsdelivr.net/npm/promptpay-qr"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 
 body{
+font-family:Arial;
 background:#0b0f1a;
 color:white;
-font-family:Arial;
-margin:0
+text-align:center;
+padding:40px
 }
 
-.header{
-background:#141824;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center
-}
-
-.title{
-font-size:22px;
-color:#ffd700
-}
-
-.controls button{
-padding:8px 15px;
-margin:5px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold
-}
-
-.banker{background:#d32f2f;color:white}
-.player{background:#1976d2;color:white}
-.tie{background:#2e7d32;color:white}
-
-.dashboard{
-display:flex;
-flex-wrap:wrap;
-gap:12px;
-padding:15px;
-background:#11141b
-}
-
-.card{
-background:#1b1f2b;
-padding:10px 15px;
-border-radius:8px;
-min-width:160px
-}
-
-.roadmap{
-display:flex;
-gap:20px;
-justify-content:center;
-flex-wrap:wrap;
-padding:20px
-}
-
-.panel{
-background:white;
+input{
 padding:10px;
-border-radius:8px
+width:250px;
+margin:6px;
+border-radius:6px;
+border:none
 }
 
-.panel h3{
-color:black;
-text-align:center
+button{
+padding:10px 20px;
+background:#00c3ff;
+border:none;
+border-radius:8px;
+cursor:pointer
 }
 
-table{
-border-collapse:collapse
-}
-
-td{
-width:24px;
-height:24px;
-border:1px solid #ddd
-}
-
-.circle{
-width:18px;
-height:18px;
-border-radius:50%;
-margin:auto
-}
-
-.red{background:#d32f2f}
-.blue{background:#1976d2}
-
-canvas{
-background:#0f1219;
-margin:20px;
-border-radius:10px
+#qrcode{
+margin-top:30px
 }
 
 </style>
@@ -104,335 +42,36 @@ border-radius:10px
 
 <body>
 
-<div class="header">
+<h2>💰 PromptPay QR Generator</h2>
 
-<div class="title">Baccarat AI Analyzer PRO</div>
+<input id="phone" placeholder="เบอร์ PromptPay เช่น 0812345678">
+<br>
 
-<div class="controls">
+<input id="amount" placeholder="จำนวนเงิน (บาท)">
+<br>
 
-<button class="banker" onclick="addResult('B')">Banker</button>
-<button class="player" onclick="addResult('P')">Player</button>
-<button class="tie" onclick="addResult('T')">Tie</button>
-<button onclick="resetGame()">Reset</button>
+<button onclick="generateQR()">สร้าง QR</button>
 
-</div>
-
-</div>
-
-<div class="dashboard">
-
-<div class="card" id="pattern"></div>
-<div class="card" id="trend"></div>
-<div class="card" id="percent"></div>
-<div class="card" id="probability"></div>
-<div class="card" id="aiPrediction"></div>
-
-</div>
-
-<div class="roadmap">
-
-<div class="panel">
-<h3>Big Road</h3>
-<table id="bigroad"></table>
-</div>
-
-<div class="panel">
-<h3>Big Eye</h3>
-<table id="bigeye"></table>
-</div>
-
-<div class="panel">
-<h3>Small Road</h3>
-<table id="smallroad"></table>
-</div>
-
-<div class="panel">
-<h3>Cockroach</h3>
-<table id="cockroach"></table>
-</div>
-
-</div>
-
-<center>
-
-<canvas id="trendGraph" width="700" height="200"></canvas>
-
-</center>
+<div id="qrcode"></div>
 
 <script>
 
-let results=[]
+function generateQR(){
 
-function addResult(r){
-results.push(r)
-update()
-}
+let phone=document.getElementById("phone").value
+let amount=parseFloat(document.getElementById("amount").value)
 
-function resetGame(){
-results=[]
-update()
-}
+let payload=PromptPayQR.generatePayload(phone,{amount:amount})
 
-function buildBigRoad(data){
+document.getElementById("qrcode").innerHTML=""
 
-let road=[[]]
-
-data.forEach(r=>{
-
-if(r==="T") return
-
-let col=road[road.length-1]
-let last=col[col.length-1]
-
-if(last===r){
-col.push(r)
-}else{
-road.push([r])
-}
-
+new QRCode(document.getElementById("qrcode"),{
+text:payload,
+width:220,
+height:220
 })
 
-return road
-
 }
-
-function render(table,data){
-
-table.innerHTML=""
-
-for(let y=0;y<6;y++){
-
-let tr=document.createElement("tr")
-
-for(let x=0;x<data.length;x++){
-
-let td=document.createElement("td")
-
-if(data[x][y]){
-
-let div=document.createElement("div")
-div.className="circle"
-
-if(data[x][y]==="B") div.classList.add("red")
-if(data[x][y]==="P") div.classList.add("blue")
-
-td.appendChild(div)
-
-}
-
-tr.appendChild(td)
-
-}
-
-table.appendChild(tr)
-
-}
-
-}
-
-function calcRoad(road,skip){
-
-let res=[]
-
-for(let i=skip;i<road.length;i++){
-
-if(road[i-1].length===road[i-skip].length){
-res.push(["B"])
-}else{
-res.push(["P"])
-}
-
-}
-
-return res
-
-}
-
-function detectPattern(){
-
-let last=results.slice(-6).join("")
-
-if(/BBBBBB/.test(last)||/PPPPPP/.test(last))
-return "Pattern: Dragon"
-
-if(/BPBPBP/.test(last)||/PBPBPB/.test(last))
-return "Pattern: Ping-Pong"
-
-return "Pattern: Normal"
-
-}
-
-function detectTrend(){
-
-let last=results.slice(-10)
-
-let b=last.filter(x=>x==="B").length
-let p=last.filter(x=>x==="P").length
-
-if(b>p) return "Trend: Banker"
-if(p>b) return "Trend: Player"
-
-return "Trend: Neutral"
-
-}
-
-function calcPercent(){
-
-let b=results.filter(x=>x==="B").length
-let p=results.filter(x=>x==="P").length
-let t=results.filter(x=>x==="T").length
-
-let total=results.length||1
-
-return `Stats → B ${Math.round(b/total*100)}% | P ${Math.round(p/total*100)}% | T ${Math.round(t/total*100)}%`
-
-}
-
-function analyzeProbability(){
-
-let b=results.filter(x=>x==="B").length
-let p=results.filter(x=>x==="P").length
-
-let total=results.length||1
-
-let bankerRate=b/total
-let playerRate=p/total
-
-let last10=results.slice(-10)
-
-let bTrend=last10.filter(x=>x==="B").length
-let pTrend=last10.filter(x=>x==="P").length
-
-let weight=0.2
-
-let bankerProb=bankerRate+(bTrend/10)*weight
-let playerProb=playerRate+(pTrend/10)*weight
-
-let sum=bankerProb+playerProb
-
-bankerProb/=sum
-playerProb/=sum
-
-return{
-banker:Math.round(bankerProb*100),
-player:Math.round(playerProb*100)
-}
-
-}
-
-function aiPredict(){
-
-if(results.length<5){
-return "AI Prediction: Waiting data"
-}
-
-let bankerScore=0
-let playerScore=0
-
-let last10=results.slice(-10)
-
-let b=last10.filter(x=>x==="B").length
-let p=last10.filter(x=>x==="P").length
-
-if(b>p) bankerScore+=2
-if(p>b) playerScore+=2
-
-let last6=results.slice(-6).join("")
-
-if(/BBBB/.test(last6)) bankerScore+=3
-if(/PPPP/.test(last6)) playerScore+=3
-
-if(/BPBP/.test(last6)) playerScore+=2
-if(/PBPB/.test(last6)) bankerScore+=2
-
-let last=results[results.length-1]
-
-let streak=1
-
-for(let i=results.length-2;i>=0;i--){
-if(results[i]===last) streak++
-else break
-}
-
-if(streak>=3){
-
-if(last==="B") bankerScore+=2
-if(last==="P") playerScore+=2
-
-}
-
-let prediction="WAIT"
-
-if(bankerScore>playerScore) prediction="BANKER"
-if(playerScore>bankerScore) prediction="PLAYER"
-
-let confidence=Math.abs(bankerScore-playerScore)*10
-
-return `AI → ${prediction} | Confidence ${confidence}%`
-
-}
-
-function drawGraph(){
-
-let canvas=document.getElementById("trendGraph")
-let ctx=canvas.getContext("2d")
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-let score=0
-let x=0
-
-ctx.beginPath()
-
-results.forEach((r,i)=>{
-
-if(r==="B") score++
-if(r==="P") score--
-
-let y=100-score*5
-
-if(i===0) ctx.moveTo(x,y)
-else ctx.lineTo(x,y)
-
-x+=15
-
-})
-
-ctx.strokeStyle="#00e5ff"
-ctx.stroke()
-
-}
-
-function update(){
-
-let road=buildBigRoad(results)
-
-render(document.getElementById("bigroad"),road)
-
-let bigeye=calcRoad(road,2)
-let small=calcRoad(road,3)
-let cock=calcRoad(road,4)
-
-render(document.getElementById("bigeye"),bigeye)
-render(document.getElementById("smallroad"),small)
-render(document.getElementById("cockroach"),cock)
-
-document.getElementById("pattern").innerText=detectPattern()
-document.getElementById("trend").innerText=detectTrend()
-document.getElementById("percent").innerText=calcPercent()
-
-let prob=analyzeProbability()
-
-document.getElementById("probability").innerText=
-`Chance → Banker ${prob.banker}% | Player ${prob.player}%`
-
-document.getElementById("aiPrediction").innerText=aiPredict()
-
-drawGraph()
-
-}
-
-update()
 
 </script>
 
