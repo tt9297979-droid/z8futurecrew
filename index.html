@@ -2,64 +2,102 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Baccarat Roadmap Dashboard</title>
+<title>Baccarat Evolution Style</title>
 
 <style>
 
 body{
-background:#0b0f1a;
+background:#0d0f14;
 color:white;
 font-family:Arial;
-text-align:center
+margin:0;
 }
 
-h1{
-margin:20px
-}
-
-button{
-padding:10px 20px;
-margin:5px;
-font-size:16px;
-border:none;
-border-radius:8px;
-cursor:pointer
-}
-
-.banker{background:#ff4040;color:white}
-.player{background:#2979ff;color:white}
-.tie{background:#00c853;color:white}
-
-.container{
+.header{
+background:#151821;
+padding:15px;
 display:flex;
-justify-content:center;
+justify-content:space-between;
+align-items:center;
+}
+
+.title{
+font-size:22px;
+color:#ffd700;
+}
+
+.controls button{
+margin:5px;
+padding:8px 15px;
+border:none;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.banker{background:#d32f2f;color:white}
+.player{background:#1976d2;color:white}
+.tie{background:#2e7d32;color:white}
+
+.dashboard{
+display:flex;
+gap:20px;
+padding:15px;
+background:#11141b;
+}
+
+.card{
+background:#1b1f2b;
+padding:10px 15px;
+border-radius:8px;
+}
+
+.roadmap{
+padding:20px;
+display:flex;
+gap:20px;
 flex-wrap:wrap;
-gap:25px;
-margin-top:20px
+justify-content:center;
 }
 
 .panel{
-background:#151b2e;
-padding:15px;
-border-radius:12px
+background:white;
+padding:10px;
+border-radius:6px;
+}
+
+.panel h3{
+color:black;
+text-align:center;
+margin:5px;
 }
 
 table{
-border-collapse:collapse
+border-collapse:collapse;
 }
 
 td{
-width:20px;
-height:20px;
-border:1px solid #333
+width:24px;
+height:24px;
+border:1px solid #ddd;
+text-align:center;
+vertical-align:middle;
 }
 
-.red{background:#ff4040}
-.blue{background:#2979ff}
+.circle{
+width:18px;
+height:18px;
+border-radius:50%;
+margin:auto;
+}
 
-.dashboard{
-margin-top:20px;
-font-size:18px
+.red{background:#d32f2f}
+.blue{background:#1976d2}
+
+canvas{
+background:#0f1219;
+margin:20px;
+border-radius:10px;
 }
 
 </style>
@@ -67,22 +105,31 @@ font-size:18px
 
 <body>
 
-<h1>Baccarat Roadmap Dashboard</h1>
+<div class="header">
 
-<button class="banker" onclick="addResult('B')">BANKER</button>
-<button class="player" onclick="addResult('P')">PLAYER</button>
-<button class="tie" onclick="addResult('T')">TIE</button>
+<div class="title">Baccarat Analyzer</div>
 
-<button onclick="resetGame()">RESET</button>
+<div class="controls">
 
-<div class="dashboard">
+<button class="banker" onclick="addResult('B')">Banker</button>
+<button class="player" onclick="addResult('P')">Player</button>
+<button class="tie" onclick="addResult('T')">Tie</button>
 
-<div id="pattern"></div>
-<div id="trend"></div>
+<button onclick="resetGame()">Reset</button>
 
 </div>
 
-<div class="container">
+</div>
+
+<div class="dashboard">
+
+<div class="card" id="pattern"></div>
+<div class="card" id="trend"></div>
+<div class="card" id="percent"></div>
+
+</div>
+
+<div class="roadmap">
 
 <div class="panel">
 <h3>Big Road</h3>
@@ -90,7 +137,7 @@ font-size:18px
 </div>
 
 <div class="panel">
-<h3>Big Eye Boy</h3>
+<h3>Big Eye</h3>
 <table id="bigeye"></table>
 </div>
 
@@ -100,28 +147,30 @@ font-size:18px
 </div>
 
 <div class="panel">
-<h3>Cockroach Road</h3>
+<h3>Cockroach</h3>
 <table id="cockroach"></table>
 </div>
 
 </div>
+
+<center>
+
+<canvas id="trendGraph" width="700" height="200"></canvas>
+
+</center>
 
 <script>
 
 let results=[]
 
 function addResult(r){
-
 results.push(r)
 update()
-
 }
 
 function resetGame(){
-
 results=[]
 update()
-
 }
 
 function buildBigRoad(data){
@@ -148,7 +197,6 @@ road.push([r])
 })
 
 return road
-
 }
 
 function render(table,data){
@@ -165,12 +213,13 @@ let td=document.createElement("td")
 
 if(data[x][y]){
 
-let v=data[x][y]
+let div=document.createElement("div")
+div.className="circle"
 
-if(v==="B") td.className="red"
-if(v==="P") td.className="blue"
-if(v==="R") td.className="red"
-if(v==="L") td.className="blue"
+if(data[x][y]==="B") div.classList.add("red")
+if(data[x][y]==="P") div.classList.add("blue")
+
+td.appendChild(div)
 
 }
 
@@ -184,97 +233,90 @@ table.appendChild(tr)
 
 }
 
-function calcBigEye(road){
+function calcRoad(road,skip){
 
 let res=[]
 
-for(let i=2;i<road.length;i++){
+for(let i=skip;i<road.length;i++){
 
-if(road[i-1].length===road[i-2].length){
-
-res.push(["R"])
-
+if(road[i-1].length===road[i-skip].length){
+res.push(["B"])
 }else{
-
-res.push(["L"])
-
+res.push(["P"])
 }
 
 }
 
 return res
-
-}
-
-function calcSmallRoad(road){
-
-let res=[]
-
-for(let i=3;i<road.length;i++){
-
-if(road[i-1].length===road[i-3].length){
-
-res.push(["R"])
-
-}else{
-
-res.push(["L"])
-
-}
-
-}
-
-return res
-
-}
-
-function calcCockroach(road){
-
-let res=[]
-
-for(let i=4;i<road.length;i++){
-
-if(road[i-1].length===road[i-4].length){
-
-res.push(["R"])
-
-}else{
-
-res.push(["L"])
-
-}
-
-}
-
-return res
-
 }
 
 function detectPattern(){
 
-let last6=results.slice(-6).join("")
+let last=results.slice(-6).join("")
 
-if(/BBBBBB/.test(last6) || /PPPPPP/.test(last6))
-return "Dragon"
+if(/BBBBBB/.test(last)||/PPPPPP/.test(last))
+return "Pattern: Dragon"
 
-if(/BPBPBP/.test(last6) || /PBPBPB/.test(last6))
-return "Ping Pong"
+if(/BPBPBP/.test(last)||/PBPBPB/.test(last))
+return "Pattern: Ping Pong"
 
-return "Normal"
+return "Pattern: Normal"
 
 }
 
 function detectTrend(){
 
-let last10=results.slice(-10)
+let last=results.slice(-10)
 
-let b=last10.filter(x=>x==="B").length
-let p=last10.filter(x=>x==="P").length
+let b=last.filter(x=>x==="B").length
+let p=last.filter(x=>x==="P").length
 
-if(b>p) return "Banker Trend"
-if(p>b) return "Player Trend"
+if(b>p) return "Trend: Banker"
+if(p>b) return "Trend: Player"
 
-return "Neutral"
+return "Trend: Neutral"
+
+}
+
+function calcPercent(){
+
+let b=results.filter(x=>x==="B").length
+let p=results.filter(x=>x==="P").length
+let t=results.filter(x=>x==="T").length
+
+let total=results.length||1
+
+return `Banker ${Math.round(b/total*100)}% | Player ${Math.round(p/total*100)}% | Tie ${Math.round(t/total*100)}%`
+}
+
+function drawGraph(){
+
+let canvas=document.getElementById("trendGraph")
+let ctx=canvas.getContext("2d")
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+let score=0
+let x=0
+
+ctx.beginPath()
+
+results.forEach((r,i)=>{
+
+if(r==="B") score++
+if(r==="P") score--
+
+let y=100-score*5
+
+if(i===0) ctx.moveTo(x,y)
+else ctx.lineTo(x,y)
+
+x+=15
+
+})
+
+ctx.strokeStyle="#00e5ff"
+ctx.stroke()
 
 }
 
@@ -284,19 +326,19 @@ let road=buildBigRoad(results)
 
 render(document.getElementById("bigroad"),road)
 
-let bigeye=calcBigEye(road)
-let small=calcSmallRoad(road)
-let cock=calcCockroach(road)
+let bigeye=calcRoad(road,2)
+let small=calcRoad(road,3)
+let cock=calcRoad(road,4)
 
 render(document.getElementById("bigeye"),bigeye)
 render(document.getElementById("smallroad"),small)
 render(document.getElementById("cockroach"),cock)
 
-document.getElementById("pattern").innerText=
-"Pattern: "+detectPattern()
+document.getElementById("pattern").innerText=detectPattern()
+document.getElementById("trend").innerText=detectTrend()
+document.getElementById("percent").innerText=calcPercent()
 
-document.getElementById("trend").innerText=
-"Trend: "+detectTrend()
+drawGraph()
 
 }
 
