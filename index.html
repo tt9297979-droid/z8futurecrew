@@ -1,136 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<title>ระบบสัญญาเงินกู้</title>
 
-<title>AI Face + Pose Detection</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
-
-<style>
-
-body{
-background:#0f172a;
-color:white;
-text-align:center;
-font-family:sans-serif;
-}
-
-video{
-border:3px solid cyan;
-border-radius:10px;
-}
-
-canvas{
-position:absolute;
-left:0;
-top:0;
-}
-
-</style>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 
 <body>
 
-<h1>🤖 AI Face + Pose Detector</h1>
+<h2>แบบฟอร์มสัญญาเงินกู้</h2>
 
-<div style="position:relative;display:inline-block">
+<form id="loanForm">
 
-<video id="video" width="640" height="480" autoplay></video>
+ชื่อผู้กู้
+<input type="text" id="name" required>
 
-<canvas id="canvas" width="640" height="480"></canvas>
+เลขบัตรประชาชน
+<input type="text" id="idcard">
 
-</div>
+ที่อยู่
+<input type="text" id="address">
 
-<script>
+จำนวนเงินกู้
+<input type="number" id="amount">
 
-const video = document.getElementById("video")
-const canvas = document.getElementById("canvas")
-const ctx = canvas.getContext("2d")
+เบอร์โทร
+<input type="text" id="phone">
 
-async function startCamera(){
+อัปโหลดบัตรประชาชน
+<input type="file" id="cardUpload">
 
-const stream = await navigator.mediaDevices.getUserMedia({
-video:true
-})
+<h3>ลายเซ็น</h3>
 
-video.srcObject = stream
+<canvas id="signature" width="300" height="150" style="border:1px solid black"></canvas>
+<br>
+<button type="button" onclick="clearSignature()">ล้างลายเซ็น</button>
 
-}
+<br><br>
 
-async function loadAI(){
+<button type="submit">สร้างสัญญา</button>
 
-const poseNet = await posenet.load()
+</form>
 
-await faceapi.nets.tinyFaceDetector.loadFromUri(
-'https://justadudewhohacks.github.io/face-api.js/models'
-)
-
-detectAI(poseNet)
-
-}
-
-async function detectAI(poseNet){
-
-setInterval(async()=>{
-
-ctx.clearRect(0,0,640,480)
-
-const faces = await faceapi.detectAllFaces(
-video,
-new faceapi.TinyFaceDetectorOptions()
-)
-
-faces.forEach(face=>{
-
-const box = face.box
-
-ctx.strokeStyle="lime"
-ctx.lineWidth=2
-
-ctx.strokeRect(
-box.x,
-box.y,
-box.width,
-box.height
-)
-
-ctx.fillText("FACE",box.x,box.y-5)
-
-})
-
-const pose = await poseNet.estimateSinglePose(video)
-
-pose.keypoints.forEach(k=>{
-
-if(k.score > 0.5){
-
-ctx.beginPath()
-
-ctx.arc(
-k.position.x,
-k.position.y,
-5,
-0,
-2*Math.PI
-)
-
-ctx.fillStyle="red"
-ctx.fill()
-
-}
-
-})
-
-},100)
-
-}
-
-startCamera().then(loadAI)
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
