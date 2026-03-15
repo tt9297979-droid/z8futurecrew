@@ -1,0 +1,20 @@
+function sendLine(name,amount,phone){
+
+fetch("https://notify-api.line.me/api/notify",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/x-www-form-urlencoded",
+"Authorization":"Bearer LINE_TOKEN"
+},
+
+body:
+"message=มีลูกหนี้ใหม่\n"+
+"ชื่อ:"+name+
+"\nจำนวนเงิน:"+amount+
+"\nโทร:"+phone
+
+})
+
+}
