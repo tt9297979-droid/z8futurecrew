@@ -1,77 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>PromptPay QR Generator</title>
+<title>AI Object Detector</title>
 
-<script src="https://cdn.jsdelivr.net/npm/promptpay-qr"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
 
 <style>
-
 body{
-font-family:Arial;
-background:#0b0f1a;
+background:#0f172a;
 color:white;
 text-align:center;
-padding:40px
+font-family:sans-serif;
 }
 
-input{
-padding:10px;
-width:250px;
-margin:6px;
-border-radius:6px;
-border:none
+video{
+border:3px solid cyan;
+border-radius:10px;
 }
 
-button{
-padding:10px 20px;
-background:#00c3ff;
-border:none;
-border-radius:8px;
-cursor:pointer
+canvas{
+position:absolute;
+left:0;
+top:0;
 }
-
-#qrcode{
-margin-top:30px
-}
-
 </style>
+
 </head>
 
 <body>
 
-<h2>💰 PromptPay QR Generator</h2>
+<h1>🤖 AI Object Detection</h1>
 
-<input id="phone" placeholder="เบอร์ PromptPay เช่น 0812345678">
-<br>
-
-<input id="amount" placeholder="จำนวนเงิน (บาท)">
-<br>
-
-<button onclick="generateQR()">สร้าง QR</button>
-
-<div id="qrcode"></div>
+<div style="position:relative;display:inline-block">
+<video id="video" width="640" height="480" autoplay></video>
+<canvas id="canvas" width="640" height="480"></canvas>
+</div>
 
 <script>
 
-function generateQR(){
+const video = document.getElementById("video")
+const canvas = document.getElementById("canvas")
+const ctx = canvas.getContext("2d")
 
-let phone=document.getElementById("phone").value
-let amount=parseFloat(document.getElementById("amount").value)
+async function setupCamera(){
 
-let payload=PromptPayQR.generatePayload(phone,{amount:amount})
-
-document.getElementById("qrcode").innerHTML=""
-
-new QRCode(document.getElementById("qrcode"),{
-text:payload,
-width:220,
-height:220
+const stream = await navigator.mediaDevices.getUserMedia({
+video:true
 })
 
+video.srcObject = stream
 }
+
+async function startAI(){
+
+const model = await cocoSsd.load()
+
+setInterval(async ()=>{
+
+const predictions = await model.detect(video)
+
+ctx.clearRect(0,0,640,480)
+
+predictions.forEach(p => {
+
+ctx.strokeStyle="lime"
+ctx.lineWidth=2
+
+ctx.strokeRect(
+p.bbox[0],
+p.bbox[1],
+p.bbox[2],
+p.bbox[3]
+)
+
+ctx.fillStyle="lime"
+ctx.fillText(
+p.class+" "+Math.round(p.score*100)+"%",
+p.bbox[0],
+p.bbox[1]-5
+)
+
+})
+
+},100)
+
+}
+
+setupCamera().then(startAI)
 
 </script>
 
