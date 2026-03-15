@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Baccarat AI Analyzer</title>
+<title>Baccarat AI Analyzer PRO</title>
 
 <style>
 
@@ -10,7 +10,7 @@ body{
 background:#0b0f1a;
 color:white;
 font-family:Arial;
-margin:0;
+margin:0
 }
 
 .header{
@@ -18,12 +18,12 @@ background:#141824;
 padding:15px;
 display:flex;
 justify-content:space-between;
-align-items:center;
+align-items:center
 }
 
 .title{
 font-size:22px;
-color:#ffd700;
+color:#ffd700
 }
 
 .controls button{
@@ -32,7 +32,7 @@ margin:5px;
 border:none;
 border-radius:6px;
 cursor:pointer;
-font-weight:bold;
+font-weight:bold
 }
 
 .banker{background:#d32f2f;color:white}
@@ -41,54 +41,53 @@ font-weight:bold;
 
 .dashboard{
 display:flex;
-gap:15px;
-padding:15px;
-background:#11141b;
 flex-wrap:wrap;
+gap:12px;
+padding:15px;
+background:#11141b
 }
 
 .card{
 background:#1b1f2b;
 padding:10px 15px;
 border-radius:8px;
-min-width:160px;
+min-width:160px
 }
 
 .roadmap{
 display:flex;
 gap:20px;
 justify-content:center;
-padding:20px;
 flex-wrap:wrap;
+padding:20px
 }
 
 .panel{
 background:white;
 padding:10px;
-border-radius:8px;
+border-radius:8px
 }
 
 .panel h3{
 color:black;
-text-align:center;
-margin:5px;
+text-align:center
 }
 
 table{
-border-collapse:collapse;
+border-collapse:collapse
 }
 
 td{
 width:24px;
 height:24px;
-border:1px solid #ddd;
+border:1px solid #ddd
 }
 
 .circle{
 width:18px;
 height:18px;
 border-radius:50%;
-margin:auto;
+margin:auto
 }
 
 .red{background:#d32f2f}
@@ -97,18 +96,17 @@ margin:auto;
 canvas{
 background:#0f1219;
 margin:20px;
-border-radius:10px;
+border-radius:10px
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="header">
 
-<div class="title">Baccarat AI Analyzer</div>
+<div class="title">Baccarat AI Analyzer PRO</div>
 
 <div class="controls">
 
@@ -127,6 +125,7 @@ border-radius:10px;
 <div class="card" id="trend"></div>
 <div class="card" id="percent"></div>
 <div class="card" id="probability"></div>
+<div class="card" id="aiPrediction"></div>
 
 </div>
 
@@ -186,13 +185,9 @@ let col=road[road.length-1]
 let last=col[col.length-1]
 
 if(last===r){
-
 col.push(r)
-
 }else{
-
 road.push([r])
-
 }
 
 })
@@ -242,13 +237,9 @@ let res=[]
 for(let i=skip;i<road.length;i++){
 
 if(road[i-1].length===road[i-skip].length){
-
 res.push(["B"])
-
 }else{
-
 res.push(["P"])
-
 }
 
 }
@@ -265,7 +256,7 @@ if(/BBBBBB/.test(last)||/PPPPPP/.test(last))
 return "Pattern: Dragon"
 
 if(/BPBPBP/.test(last)||/PBPBPB/.test(last))
-return "Pattern: Ping Pong"
+return "Pattern: Ping-Pong"
 
 return "Pattern: Normal"
 
@@ -329,6 +320,58 @@ player:Math.round(playerProb*100)
 
 }
 
+function aiPredict(){
+
+if(results.length<5){
+return "AI Prediction: Waiting data"
+}
+
+let bankerScore=0
+let playerScore=0
+
+let last10=results.slice(-10)
+
+let b=last10.filter(x=>x==="B").length
+let p=last10.filter(x=>x==="P").length
+
+if(b>p) bankerScore+=2
+if(p>b) playerScore+=2
+
+let last6=results.slice(-6).join("")
+
+if(/BBBB/.test(last6)) bankerScore+=3
+if(/PPPP/.test(last6)) playerScore+=3
+
+if(/BPBP/.test(last6)) playerScore+=2
+if(/PBPB/.test(last6)) bankerScore+=2
+
+let last=results[results.length-1]
+
+let streak=1
+
+for(let i=results.length-2;i>=0;i--){
+if(results[i]===last) streak++
+else break
+}
+
+if(streak>=3){
+
+if(last==="B") bankerScore+=2
+if(last==="P") playerScore+=2
+
+}
+
+let prediction="WAIT"
+
+if(bankerScore>playerScore) prediction="BANKER"
+if(playerScore>bankerScore) prediction="PLAYER"
+
+let confidence=Math.abs(bankerScore-playerScore)*10
+
+return `AI → ${prediction} | Confidence ${confidence}%`
+
+}
+
 function drawGraph(){
 
 let canvas=document.getElementById("trendGraph")
@@ -381,7 +424,9 @@ document.getElementById("percent").innerText=calcPercent()
 let prob=analyzeProbability()
 
 document.getElementById("probability").innerText=
-"Win Chance → Banker "+prob.banker+"% | Player "+prob.player+"%"
+`Chance → Banker ${prob.banker}% | Player ${prob.player}%`
+
+document.getElementById("aiPrediction").innerText=aiPredict()
 
 drawGraph()
 
