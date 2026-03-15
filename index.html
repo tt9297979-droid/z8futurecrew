@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Object Detector</title>
+
+<title>AI Face + Pose Detection</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
 
 <style>
+
 body{
 background:#0f172a;
 color:white;
@@ -24,17 +27,21 @@ position:absolute;
 left:0;
 top:0;
 }
+
 </style>
 
 </head>
 
 <body>
 
-<h1>🤖 AI Object Detection</h1>
+<h1>🤖 AI Face + Pose Detector</h1>
 
 <div style="position:relative;display:inline-block">
+
 <video id="video" width="640" height="480" autoplay></video>
+
 <canvas id="canvas" width="640" height="480"></canvas>
+
 </div>
 
 <script>
@@ -43,43 +50,77 @@ const video = document.getElementById("video")
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
 
-async function setupCamera(){
+async function startCamera(){
 
 const stream = await navigator.mediaDevices.getUserMedia({
 video:true
 })
 
 video.srcObject = stream
+
 }
 
-async function startAI(){
+async function loadAI(){
 
-const model = await cocoSsd.load()
+const poseNet = await posenet.load()
 
-setInterval(async ()=>{
+await faceapi.nets.tinyFaceDetector.loadFromUri(
+'https://justadudewhohacks.github.io/face-api.js/models'
+)
 
-const predictions = await model.detect(video)
+detectAI(poseNet)
+
+}
+
+async function detectAI(poseNet){
+
+setInterval(async()=>{
 
 ctx.clearRect(0,0,640,480)
 
-predictions.forEach(p => {
+const faces = await faceapi.detectAllFaces(
+video,
+new faceapi.TinyFaceDetectorOptions()
+)
+
+faces.forEach(face=>{
+
+const box = face.box
 
 ctx.strokeStyle="lime"
 ctx.lineWidth=2
 
 ctx.strokeRect(
-p.bbox[0],
-p.bbox[1],
-p.bbox[2],
-p.bbox[3]
+box.x,
+box.y,
+box.width,
+box.height
 )
 
-ctx.fillStyle="lime"
-ctx.fillText(
-p.class+" "+Math.round(p.score*100)+"%",
-p.bbox[0],
-p.bbox[1]-5
+ctx.fillText("FACE",box.x,box.y-5)
+
+})
+
+const pose = await poseNet.estimateSinglePose(video)
+
+pose.keypoints.forEach(k=>{
+
+if(k.score > 0.5){
+
+ctx.beginPath()
+
+ctx.arc(
+k.position.x,
+k.position.y,
+5,
+0,
+2*Math.PI
 )
+
+ctx.fillStyle="red"
+ctx.fill()
+
+}
 
 })
 
@@ -87,7 +128,7 @@ p.bbox[1]-5
 
 }
 
-setupCamera().then(startAI)
+startCamera().then(loadAI)
 
 </script>
 
