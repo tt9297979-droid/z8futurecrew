@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Baccarat Screen Analyzer</title>
+<title>Baccarat Roadmap Dashboard</title>
 
 <style>
 
@@ -18,24 +18,29 @@ margin:20px
 }
 
 button{
-padding:12px 25px;
+padding:10px 20px;
+margin:5px;
 font-size:16px;
-background:#00c3ff;
 border:none;
 border-radius:8px;
 cursor:pointer
 }
 
+.banker{background:#ff4040;color:white}
+.player{background:#2979ff;color:white}
+.tie{background:#00c853;color:white}
+
 .container{
 display:flex;
 justify-content:center;
-gap:30px;
-margin-top:30px
+flex-wrap:wrap;
+gap:25px;
+margin-top:20px
 }
 
 .panel{
 background:#151b2e;
-padding:20px;
+padding:15px;
 border-radius:12px
 }
 
@@ -44,32 +49,38 @@ border-collapse:collapse
 }
 
 td{
-width:22px;
-height:22px;
+width:20px;
+height:20px;
 border:1px solid #333
 }
 
-.red{background:#ff3d3d}
+.red{background:#ff4040}
 .blue{background:#2979ff}
 
-video{
-border-radius:10px;
-margin-top:20px
+.dashboard{
+margin-top:20px;
+font-size:18px
 }
 
 </style>
-
 </head>
 
 <body>
 
-<h1>Baccarat AI Screen Analyzer</h1>
+<h1>Baccarat Roadmap Dashboard</h1>
 
-<button onclick="startCapture()">Share Screen</button>
+<button class="banker" onclick="addResult('B')">BANKER</button>
+<button class="player" onclick="addResult('P')">PLAYER</button>
+<button class="tie" onclick="addResult('T')">TIE</button>
 
-<br><br>
+<button onclick="resetGame()">RESET</button>
 
-<video id="video" width="400" autoplay muted></video>
+<div class="dashboard">
+
+<div id="pattern"></div>
+<div id="trend"></div>
+
+</div>
 
 <div class="container">
 
@@ -78,69 +89,37 @@ margin-top:20px
 <table id="bigroad"></table>
 </div>
 
+<div class="panel">
+<h3>Big Eye Boy</h3>
+<table id="bigeye"></table>
+</div>
+
+<div class="panel">
+<h3>Small Road</h3>
+<table id="smallroad"></table>
+</div>
+
+<div class="panel">
+<h3>Cockroach Road</h3>
+<table id="cockroach"></table>
+</div>
+
 </div>
 
 <script>
 
 let results=[]
 
-async function startCapture(){
-
-const stream=await navigator.mediaDevices.getDisplayMedia({
-video:true
-})
-
-const video=document.getElementById("video")
-video.srcObject=stream
-
-setInterval(()=>scanFrame(video),2000)
-
-}
-
-function scanFrame(video){
-
-const canvas=document.createElement("canvas")
-canvas.width=video.videoWidth
-canvas.height=video.videoHeight
-
-const ctx=canvas.getContext("2d")
-
-ctx.drawImage(video,0,0)
-
-const img=ctx.getImageData(0,0,canvas.width,canvas.height)
-
-let redCount=0
-let blueCount=0
-
-for(let i=0;i<img.data.length;i+=40){
-
-let r=img.data[i]
-let g=img.data[i+1]
-let b=img.data[i+2]
-
-if(r>200 && g<100 && b<100) redCount++
-if(b>200 && r<100 && g<100) blueCount++
-
-}
-
-if(redCount>blueCount && redCount>500){
-
-addResult("B")
-
-}else if(blueCount>redCount && blueCount>500){
-
-addResult("P")
-
-}
-
-}
-
 function addResult(r){
 
-if(results[results.length-1]===r) return
-
 results.push(r)
+update()
 
+}
+
+function resetGame(){
+
+results=[]
 update()
 
 }
@@ -150,6 +129,8 @@ function buildBigRoad(data){
 let road=[[]]
 
 data.forEach(r=>{
+
+if(r==="T") return
 
 let col=road[road.length-1]
 let last=col[col.length-1]
@@ -184,8 +165,12 @@ let td=document.createElement("td")
 
 if(data[x][y]){
 
-if(data[x][y]==="B") td.className="red"
-if(data[x][y]==="P") td.className="blue"
+let v=data[x][y]
+
+if(v==="B") td.className="red"
+if(v==="P") td.className="blue"
+if(v==="R") td.className="red"
+if(v==="L") td.className="blue"
 
 }
 
@@ -199,13 +184,123 @@ table.appendChild(tr)
 
 }
 
+function calcBigEye(road){
+
+let res=[]
+
+for(let i=2;i<road.length;i++){
+
+if(road[i-1].length===road[i-2].length){
+
+res.push(["R"])
+
+}else{
+
+res.push(["L"])
+
+}
+
+}
+
+return res
+
+}
+
+function calcSmallRoad(road){
+
+let res=[]
+
+for(let i=3;i<road.length;i++){
+
+if(road[i-1].length===road[i-3].length){
+
+res.push(["R"])
+
+}else{
+
+res.push(["L"])
+
+}
+
+}
+
+return res
+
+}
+
+function calcCockroach(road){
+
+let res=[]
+
+for(let i=4;i<road.length;i++){
+
+if(road[i-1].length===road[i-4].length){
+
+res.push(["R"])
+
+}else{
+
+res.push(["L"])
+
+}
+
+}
+
+return res
+
+}
+
+function detectPattern(){
+
+let last6=results.slice(-6).join("")
+
+if(/BBBBBB/.test(last6) || /PPPPPP/.test(last6))
+return "Dragon"
+
+if(/BPBPBP/.test(last6) || /PBPBPB/.test(last6))
+return "Ping Pong"
+
+return "Normal"
+
+}
+
+function detectTrend(){
+
+let last10=results.slice(-10)
+
+let b=last10.filter(x=>x==="B").length
+let p=last10.filter(x=>x==="P").length
+
+if(b>p) return "Banker Trend"
+if(p>b) return "Player Trend"
+
+return "Neutral"
+
+}
+
 function update(){
 
 let road=buildBigRoad(results)
 
 render(document.getElementById("bigroad"),road)
 
+let bigeye=calcBigEye(road)
+let small=calcSmallRoad(road)
+let cock=calcCockroach(road)
+
+render(document.getElementById("bigeye"),bigeye)
+render(document.getElementById("smallroad"),small)
+render(document.getElementById("cockroach"),cock)
+
+document.getElementById("pattern").innerText=
+"Pattern: "+detectPattern()
+
+document.getElementById("trend").innerText=
+"Trend: "+detectTrend()
+
 }
+
+update()
 
 </script>
 
