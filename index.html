@@ -1,35 +1,81 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-<title>GOLD AI TERMINAL</title>
+<title>AI Hedge Fund Terminal</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
 body{
-background:#0b0b0b;
+background:#0a0f1c;
 color:white;
 font-family:Arial;
-text-align:center;
+margin:0;
 }
 
-.box{
-background:#1a1a1a;
+.sidebar{
+width:220px;
+height:100vh;
+background:#020617;
+position:fixed;
 padding:20px;
-margin:20px;
-border-radius:12px;
 }
 
-h1{
-color:gold;
+.sidebar h2{
+color:#38bdf8;
 }
 
-button{
-padding:10px 20px;
-background:gold;
+.sidebar button{
+display:block;
+width:100%;
+margin:10px 0;
+padding:10px;
+background:#111827;
 border:none;
-border-radius:8px;
-font-size:16px;
+color:white;
+cursor:pointer;
+}
+
+.main{
+margin-left:240px;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.card{
+background:#020617;
+padding:20px;
+border-radius:10px;
+}
+
+.news{
+padding:10px;
+background:#1e293b;
+margin:5px 0;
+border-radius:6px;
+}
+
+input{
+padding:10px;
+border-radius:6px;
+border:none;
+width:200px;
+}
+
+button.analyze{
+padding:10px 20px;
+background:#3b82f6;
+border:none;
+color:white;
+border-radius:6px;
 }
 
 </style>
@@ -38,63 +84,148 @@ font-size:16px;
 
 <body>
 
-<h1>GOLD AI HEDGE FUND</h1>
+<div class="sidebar">
 
-<div class="box">
+<h2>🤖 AI TERMINAL</h2>
 
-<h2 id="trend">Trend : -</h2>
-<h2 id="signal">Signal : -</h2>
-<h2 id="entry">Entry : -</h2>
-
-</div>
-
-<div class="box">
-
-<h3 id="tp1">TP1 : -</h3>
-<h3 id="tp2">TP2 : -</h3>
-<h3 id="tp3">TP3 : -</h3>
+<button>Dashboard</button>
+<button>Market Scanner</button>
+<button>AI Signals</button>
+<button>Liquidity Map</button>
+<button>News</button>
 
 </div>
 
-<button onclick="analyze()">Analyze Market</button>
+<div class="main">
 
-<div class="box">
+<h1>AI Hedge Fund Terminal</h1>
 
-<iframe
-src="https://www.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=5"
-width="100%"
-height="500">
-</iframe>
+<input id="symbol" placeholder="Symbol (AAPL)">
+<button class="analyze" onclick="analyze()">Analyze</button>
+
+<div class="grid">
+
+<div class="card">
+<h3>Market Chart</h3>
+<canvas id="chart"></canvas>
+</div>
+
+<div class="card">
+
+<h3>AI Signals</h3>
+
+<p id="trend">Trend:</p>
+<p id="entry">Entry:</p>
+<p id="tp">Take Profit:</p>
+<p id="sl">Stop Loss:</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Market News</h3>
+
+<div id="news"></div>
+
+</div>
 
 </div>
 
 <script>
 
+let chart;
+
 function analyze(){
 
-let price = 2000 + Math.random()*20
+let data=[];
+let labels=[];
 
-let trend = Math.random() > 0.5 ? "BULLISH":"BEARISH"
+for(let i=0;i<50;i++){
 
-let signal = trend == "BULLISH" ? "BUY":"SELL"
+let p=Math.random()*50+100;
 
-let entry = trend == "BULLISH" ? price-5 : price+5
+data.push(p);
+labels.push(i);
 
-let tp1 = trend == "BULLISH" ? price+10 : price-10
-let tp2 = trend == "BULLISH" ? price+20 : price-20
-let tp3 = trend == "BULLISH" ? price+30 : price-30
+}
 
-document.getElementById("trend").innerText = "Trend : "+trend
-document.getElementById("signal").innerText = "Signal : "+signal
-document.getElementById("entry").innerText = "Entry : "+entry.toFixed(2)
+drawChart(labels,data);
 
-document.getElementById("tp1").innerText = "TP1 : "+tp1.toFixed(2)
-document.getElementById("tp2").innerText = "TP2 : "+tp2.toFixed(2)
-document.getElementById("tp3").innerText = "TP3 : "+tp3.toFixed(2)
+ai(data);
+
+news();
+
+}
+
+function drawChart(labels,data){
+
+if(chart) chart.destroy();
+
+let ctx=document.getElementById("chart");
+
+chart=new Chart(ctx,{
+type:"line",
+data:{
+labels:labels,
+datasets:[{
+label:"Price",
+data:data
+}]
+}
+})
+
+}
+
+function ai(data){
+
+let last=data[data.length-1];
+let prev=data[data.length-2];
+
+let trend=last>prev?"BULLISH":"BEARISH";
+
+let entry=(last*0.99).toFixed(2);
+let tp=(last*1.05).toFixed(2);
+let sl=(last*0.97).toFixed(2);
+
+document.getElementById("trend").innerText="Trend: "+trend;
+document.getElementById("entry").innerText="Entry: "+entry;
+document.getElementById("tp").innerText="Take Profit: "+tp;
+document.getElementById("sl").innerText="Stop Loss: "+sl;
+
+}
+
+function news(){
+
+let newsData=[
+
+"Federal Reserve signals rate changes",
+
+"Tech stocks rally in early trading",
+
+"Crypto market sees strong inflow"
+
+]
+
+let div=document.getElementById("news");
+
+div.innerHTML="";
+
+newsData.forEach(n=>{
+
+let d=document.createElement("div");
+d.className="news";
+d.innerText=n;
+
+div.appendChild(d);
+
+})
 
 }
 
 </script>
 
 </body>
+
 </html>
