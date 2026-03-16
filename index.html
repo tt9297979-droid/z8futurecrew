@@ -1,143 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Gold AI Signal</title>
 
-<script src="https://s3.tradingview.com/tv.js"></script>
+<title>GOLD AI TERMINAL</title>
 
 <style>
 
 body{
-background:#0f172a;
+background:#0b0b0b;
 color:white;
 font-family:Arial;
 text-align:center;
 }
 
-h1{
-color:#facc15;
-margin-top:20px;
-}
-
-.container{
-max-width:900px;
-margin:auto;
-}
-
-.signal{
-background:#1e293b;
-padding:20px;
-border-radius:12px;
-margin:20px;
-font-size:20px;
-}
-
-.buy{
-color:#22c55e;
-}
-
-.sell{
-color:#ef4444;
-}
-
-#chart{
-height:500px;
-}
-
 .box{
-display:flex;
-justify-content:space-around;
-margin-top:10px;
+background:#1a1a1a;
+padding:20px;
+margin:20px;
+border-radius:12px;
 }
 
-.value{
-font-size:18px;
+h1{
+color:gold;
+}
+
+button{
+padding:10px 20px;
+background:gold;
+border:none;
+border-radius:8px;
+font-size:16px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<h1>GOLD AI SIGNAL</h1>
-
-<div class="container">
-
-<div class="signal">
-
-<div id="signal">Loading...</div>
+<h1>GOLD AI HEDGE FUND</h1>
 
 <div class="box">
-<div class="value">Entry: <span id="entry"></span></div>
-<div class="value">SL: <span id="sl"></span></div>
-<div class="value">TP: <span id="tp"></span></div>
-</div>
+
+<h2 id="trend">Trend : -</h2>
+<h2 id="signal">Signal : -</h2>
+<h2 id="entry">Entry : -</h2>
 
 </div>
 
-<div id="chart"></div>
+<div class="box">
+
+<h3 id="tp1">TP1 : -</h3>
+<h3 id="tp2">TP2 : -</h3>
+<h3 id="tp3">TP3 : -</h3>
+
+</div>
+
+<button onclick="analyze()">Analyze Market</button>
+
+<div class="box">
+
+<iframe
+src="https://www.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=5"
+width="100%"
+height="500">
+</iframe>
 
 </div>
 
 <script>
 
-// TradingView Chart
-new TradingView.widget({
-symbol: "OANDA:XAUUSD",
-interval: "5",
-container_id: "chart",
-theme: "dark",
-style: "1",
-locale: "en",
-toolbar_bg: "#0f172a",
-enable_publishing: false,
-hide_top_toolbar: false,
-save_image: false,
-});
+function analyze(){
 
-// Fake market data simulation
-function generateSignal(){
+let price = 2000 + Math.random()*20
 
-let price = 2000 + Math.random()*50;
+let trend = Math.random() > 0.5 ? "BULLISH":"BEARISH"
 
-let rsi = Math.random()*100;
-let macd = Math.random()*2 -1;
+let signal = trend == "BULLISH" ? "BUY":"SELL"
 
-let signal;
-let entry;
-let sl;
-let tp;
+let entry = trend == "BULLISH" ? price-5 : price+5
 
-if(rsi < 35 && macd > 0){
+let tp1 = trend == "BULLISH" ? price+10 : price-10
+let tp2 = trend == "BULLISH" ? price+20 : price-20
+let tp3 = trend == "BULLISH" ? price+30 : price-30
 
-signal="BUY";
-entry=price.toFixed(2);
-sl=(price-10).toFixed(2);
-tp=(price+20).toFixed(2);
+document.getElementById("trend").innerText = "Trend : "+trend
+document.getElementById("signal").innerText = "Signal : "+signal
+document.getElementById("entry").innerText = "Entry : "+entry.toFixed(2)
 
-}else{
-
-signal="SELL";
-entry=price.toFixed(2);
-sl=(price+10).toFixed(2);
-tp=(price-20).toFixed(2);
+document.getElementById("tp1").innerText = "TP1 : "+tp1.toFixed(2)
+document.getElementById("tp2").innerText = "TP2 : "+tp2.toFixed(2)
+document.getElementById("tp3").innerText = "TP3 : "+tp3.toFixed(2)
 
 }
-
-document.getElementById("signal").innerHTML=
-signal=="BUY"
-? "<span class='buy'>BUY SIGNAL</span>"
-: "<span class='sell'>SELL SIGNAL</span>";
-
-document.getElementById("entry").innerText=entry;
-document.getElementById("sl").innerText=sl;
-document.getElementById("tp").innerText=tp;
-
-}
-
-setInterval(generateSignal,4000);
-generateSignal();
 
 </script>
 
