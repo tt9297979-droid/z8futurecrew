@@ -1,77 +1,58 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>ระบบสร้างสัญญาเงินกู้อัตโนมัติ</title>
+<title>Gold AI Signal</title>
 
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://s3.tradingview.com/tv.js"></script>
 
 <style>
 
 body{
-font-family:sans-serif;
-background:linear-gradient(135deg,#2b7cff,#4fa3ff);
-padding:40px;
-}
-
-.container{
-background:white;
-max-width:720px;
-margin:auto;
-padding:30px;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
+background:#0f172a;
+color:white;
+font-family:Arial;
+text-align:center;
 }
 
 h1{
-text-align:center;
-color:#2b7cff;
+color:#facc15;
+margin-top:20px;
 }
 
-.subtitle{
-text-align:center;
-margin-bottom:25px;
-color:#555;
+.container{
+max-width:900px;
+margin:auto;
 }
 
-input,select{
-width:100%;
-padding:12px;
-margin-bottom:12px;
-border:1px solid #ddd;
-border-radius:6px;
-font-size:14px;
+.signal{
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+margin:20px;
+font-size:20px;
 }
 
-button{
-width:100%;
-padding:14px;
-background:#2b7cff;
-color:white;
-border:none;
-border-radius:6px;
-font-size:16px;
-cursor:pointer;
+.buy{
+color:#22c55e;
 }
 
-button:hover{
-background:#1f63cc;
+.sell{
+color:#ef4444;
 }
 
-canvas{
-border:1px solid #ddd;
-width:100%;
-height:150px;
-margin-bottom:10px;
+#chart{
+height:500px;
 }
 
-.info{
-background:#f4f6ff;
-padding:10px;
-border-radius:6px;
-margin-bottom:10px;
-font-size:14px;
+.box{
+display:flex;
+justify-content:space-around;
+margin-top:10px;
+}
+
+.value{
+font-size:18px;
 }
 
 </style>
@@ -79,201 +60,84 @@ font-size:14px;
 
 <body>
 
+<h1>GOLD AI SIGNAL</h1>
+
 <div class="container">
 
-<h1>ระบบสร้างสัญญาเงินกู้</h1>
+<div class="signal">
 
-<div class="subtitle">
-สร้างสัญญาเงินกู้อัตโนมัติ ไม่ต้องเขียนสัญญาเอง
+<div id="signal">Loading...</div>
+
+<div class="box">
+<div class="value">Entry: <span id="entry"></span></div>
+<div class="value">SL: <span id="sl"></span></div>
+<div class="value">TP: <span id="tp"></span></div>
 </div>
 
-<form id="loanForm">
-
-<input id="name" placeholder="ชื่อผู้กู้" required>
-
-<input id="idcard" placeholder="เลขบัตรประชาชน">
-
-<input id="address" placeholder="ที่อยู่ปัจจุบัน">
-
-<input id="job" placeholder="สถานที่ทำงาน">
-
-<input id="salary" placeholder="เงินเดือน">
-
-<input id="phone" placeholder="เบอร์โทร">
-
-<input id="amount" type="number" placeholder="จำนวนเงินกู้ (บาท)" required>
-
-<label>ธนาคารผู้กู้</label>
-
-<select id="bank">
-
-<option value="กรุงไทย">ธนาคารกรุงไทย</option>
-<option value="กสิกรไทย">ธนาคารกสิกรไทย</option>
-<option value="ไทยพาณิชย์">ธนาคารไทยพาณิชย์</option>
-<option value="กรุงเทพ">ธนาคารกรุงเทพ</option>
-<option value="ttb">ธนาคารทหารไทยธนชาต</option>
-<option value="ออมสิน">ธนาคารออมสิน</option>
-<option value="ธกส">ธนาคารเพื่อการเกษตร</option>
-
-</select>
-
-<input id="bankaccount" placeholder="เลขบัญชีผู้กู้">
-
-<div class="info">
-อัปโหลดบัตรประชาชน
 </div>
 
-<input type="file">
-
-<div class="info">
-เซ็นลายเซ็นผู้กู้
-</div>
-
-<canvas id="signature"></canvas>
-
-<button type="button" onclick="clearSignature()">
-ล้างลายเซ็น
-</button>
-
-<br><br>
-
-<button type="submit">
-สร้างสัญญาและดาวน์โหลด
-</button>
-
-</form>
+<div id="chart"></div>
 
 </div>
 
 <script>
 
-const canvas=document.getElementById("signature")
+// TradingView Chart
+new TradingView.widget({
+symbol: "OANDA:XAUUSD",
+interval: "5",
+container_id: "chart",
+theme: "dark",
+style: "1",
+locale: "en",
+toolbar_bg: "#0f172a",
+enable_publishing: false,
+hide_top_toolbar: false,
+save_image: false,
+});
 
-const signaturePad=new SignaturePad(canvas)
+// Fake market data simulation
+function generateSignal(){
 
-function clearSignature(){
+let price = 2000 + Math.random()*50;
 
-signaturePad.clear()
+let rsi = Math.random()*100;
+let macd = Math.random()*2 -1;
 
-}
+let signal;
+let entry;
+let sl;
+let tp;
 
-document.getElementById("loanForm").addEventListener("submit",function(e){
+if(rsi < 35 && macd > 0){
 
-e.preventDefault()
+signal="BUY";
+entry=price.toFixed(2);
+sl=(price-10).toFixed(2);
+tp=(price+20).toFixed(2);
 
-const name=document.getElementById("name").value
-const idcard=document.getElementById("idcard").value
-const address=document.getElementById("address").value
-const job=document.getElementById("job").value
-const salary=document.getElementById("salary").value
-const phone=document.getElementById("phone").value
-const amount=document.getElementById("amount").value
-const bank=document.getElementById("bank").value
-const bankaccount=document.getElementById("bankaccount").value
+}else{
 
-const contractNumber="LN"+Date.now()
-
-const today=new Date()
-
-const dueDate=new Date()
-
-dueDate.setMonth(dueDate.getMonth()+1)
-
-const todayText=today.toLocaleDateString("th-TH")
-const dueDateText=dueDate.toLocaleDateString("th-TH")
-
-const interest=amount*0.10
-const total=Number(amount)+interest
-const penalty=total*0.02
-
-const qr="https://promptpay.io/0934714311/"+total+".png"
-
-const {jsPDF}=window.jspdf
-
-const doc=new jsPDF()
-
-doc.setFontSize(18)
-doc.text("สัญญาเงินกู้",85,20)
-
-doc.setFontSize(12)
-
-doc.text("เลขที่สัญญา: "+contractNumber,20,40)
-
-doc.text("วันที่ทำสัญญา: "+todayText,20,50)
-
-doc.text("กำหนดชำระ: "+dueDateText,20,60)
-
-doc.text("ข้อมูลผู้ให้กู้",20,80)
-
-doc.text("นายพีระพัฒน์ ทองระมุน",20,90)
-
-doc.text("เลขบัตร: 1103704092018",20,100)
-
-doc.text("โทร: 0934714311",20,110)
-
-doc.text("บัญชีผู้โอน",20,130)
-
-doc.text("ธนาคาร: กรุงไทย",20,140)
-
-doc.text("เลขบัญชี: 3260643737",20,150)
-
-doc.text("ข้อมูลผู้กู้",20,170)
-
-doc.text("ชื่อ: "+name,20,180)
-
-doc.text("เลขบัตร: "+idcard,20,190)
-
-doc.text("ที่อยู่: "+address,20,200)
-
-doc.text("สถานที่ทำงาน: "+job,20,210)
-
-doc.text("เงินเดือน: "+salary,20,220)
-
-doc.text("เบอร์โทร: "+phone,20,230)
-
-doc.text("ธนาคารผู้กู้: "+bank,20,240)
-
-doc.text("เลขบัญชีผู้กู้: "+bankaccount,20,250)
-
-doc.addPage()
-
-doc.text("รายละเอียดเงินกู้",20,30)
-
-doc.text("จำนวนเงินกู้: "+amount+" บาท",20,50)
-
-doc.text("ดอกเบี้ย (10%): "+interest+" บาท",20,60)
-
-doc.text("ยอดชำระรวม: "+total+" บาท",20,70)
-
-doc.text("ค่าปรับรายวัน (2%): "+penalty+" บาท",20,80)
-
-doc.text("กำหนดชำระภายใน 1 เดือนนับจากวันทำสัญญา",20,100)
-
-doc.text("ช่องทางชำระเงิน",140,40)
-
-doc.addImage(qr,"PNG",140,50,40,40)
-
-if(!signaturePad.isEmpty()){
-
-const img=signaturePad.toDataURL("image/png")
-
-doc.text("ลายเซ็นผู้กู้",140,110)
-
-doc.addImage(img,"PNG",140,120,40,20)
+signal="SELL";
+entry=price.toFixed(2);
+sl=(price+10).toFixed(2);
+tp=(price-20).toFixed(2);
 
 }
 
-doc.save("loan_contract.pdf")
+document.getElementById("signal").innerHTML=
+signal=="BUY"
+? "<span class='buy'>BUY SIGNAL</span>"
+: "<span class='sell'>SELL SIGNAL</span>";
 
-setTimeout(function(){
+document.getElementById("entry").innerText=entry;
+document.getElementById("sl").innerText=sl;
+document.getElementById("tp").innerText=tp;
 
-alert("กรุณาส่งสัญญาที่ดาวน์โหลดไปยัง LINE")
+}
 
-window.open("https://lin.ee/wv8NVPG","_blank")
-
-},1500)
-
-})
+setInterval(generateSignal,4000);
+generateSignal();
 
 </script>
 
